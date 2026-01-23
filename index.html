@@ -817,7 +817,10 @@
         async function checkHealth() {
             if (!API_URL) { updateStatus(false, 'Not connected'); return; }
             try {
-                const r = await fetch(`${API_URL}/api/health`, { mode: 'cors' });
+                const r = await fetch(`${API_URL}/api/health`, {
+                    mode: 'cors',
+                    headers: { 'ngrok-skip-browser-warning': 'true' }
+                });
                 const d = await r.json();
                 if (d.status === 'ok') { updateStatus(true, 'Online'); return; }
             } catch (e) {}
@@ -851,7 +854,10 @@
             try {
                 const r = await fetch(`${API_URL}/api/chat`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': 'true'
+                    },
                     mode: 'cors',
                     body: JSON.stringify({ message: msg, history: conversationHistory })
                 });
