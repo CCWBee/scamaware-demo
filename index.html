@@ -777,9 +777,11 @@
     </div>
 
     <script>
-        // DEFAULT_API_URL is auto-updated by startup script
+        // DEFAULT_API_URL is auto-updated by startup script - always use it
         const DEFAULT_API_URL = 'https://overlate-controllingly-jenise.ngrok-free.dev';
-        let API_URL = localStorage.getItem('scamaware_api_url') || DEFAULT_API_URL;
+        // Clear any stale cached URLs and always use default
+        localStorage.removeItem('scamaware_api_url');
+        let API_URL = DEFAULT_API_URL;
         let conversationHistory = [];
         let isLoading = false;
         let chatOpen = false;
