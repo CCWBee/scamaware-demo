@@ -7,12 +7,13 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --navy: #1a1f3d;
             --blue: #0066a1;
             --blue-dark: #004d7a;
+            --blue-light: #e8f4fc;
             --red: #c8102e;
             --green: #34c759;
             --gray-50: #fbfbfd;
@@ -24,58 +25,44 @@
             --white: #ffffff;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--white);
             color: var(--gray-800);
-            line-height: 1.5;
+            line-height: 1.6;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Navigation */
+        /* Nav */
         .nav {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             z-index: 1000;
             background: rgba(255,255,255,0.8);
             backdrop-filter: saturate(180%) blur(20px);
-            -webkit-backdrop-filter: saturate(180%) blur(20px);
-            border-bottom: 1px solid rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(0,0,0,0.08);
         }
-
         .nav-content {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 16px 24px;
+            padding: 14px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
         .nav-logo {
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             font-weight: 600;
             color: var(--navy);
             display: flex;
             align-items: center;
             gap: 10px;
         }
-
         .nav-logo-icon {
-            width: 32px;
-            height: 32px;
+            width: 32px; height: 32px;
             background: var(--blue);
             border-radius: 8px;
             display: flex;
@@ -83,43 +70,29 @@
             justify-content: center;
             color: white;
             font-weight: 700;
-            font-size: 1rem;
         }
-
         .nav-links {
             display: flex;
-            gap: 32px;
+            gap: 28px;
             align-items: center;
         }
-
         .nav-links a {
             color: var(--gray-600);
             text-decoration: none;
             font-size: 0.875rem;
             font-weight: 500;
-            transition: color 0.2s;
         }
-
-        .nav-links a:hover {
-            color: var(--gray-800);
-        }
-
+        .nav-links a:hover { color: var(--gray-800); }
         .settings-btn {
             background: none;
             border: none;
-            color: var(--gray-600);
+            color: var(--gray-400);
             cursor: pointer;
             padding: 8px;
-            border-radius: 50%;
-            transition: background 0.2s;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
 
-        .settings-btn:hover {
-            background: var(--gray-100);
-        }
-
-        /* Hero Section - Apple Style */
+        /* Hero */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -128,246 +101,238 @@
             align-items: center;
             text-align: center;
             padding: 120px 24px 80px;
-            background: linear-gradient(180deg, var(--white) 0%, var(--gray-50) 100%);
+            background: linear-gradient(180deg, #fff 0%, var(--gray-50) 100%);
         }
-
-        .hero-eyebrow {
-            font-size: 1.25rem;
-            font-weight: 600;
+        .hero-badge {
+            display: inline-block;
+            background: var(--blue-light);
             color: var(--blue);
-            margin-bottom: 16px;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            font-weight: 700;
-            color: var(--gray-800);
-            line-height: 1.1;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
             margin-bottom: 24px;
-            letter-spacing: -0.02em;
         }
-
-        .hero-subtitle {
-            font-size: clamp(1.25rem, 3vw, 1.75rem);
+        .hero h1 {
+            font-size: clamp(3rem, 10vw, 5.5rem);
+            font-weight: 800;
+            color: var(--gray-800);
+            line-height: 1.05;
+            margin-bottom: 24px;
+            letter-spacing: -0.03em;
+        }
+        .hero h1 span { color: var(--blue); }
+        .hero-sub {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
             color: var(--gray-600);
-            max-width: 700px;
-            margin-bottom: 48px;
-            line-height: 1.4;
+            max-width: 600px;
+            margin-bottom: 40px;
         }
-
         .hero-cta {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             background: var(--blue);
             color: white;
-            padding: 18px 36px;
+            padding: 18px 40px;
             border-radius: 980px;
             font-size: 1.1rem;
-            font-weight: 500;
-            text-decoration: none;
+            font-weight: 600;
             border: none;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
-
         .hero-cta:hover {
             background: var(--blue-dark);
             transform: scale(1.02);
         }
 
-        .hero-cta-secondary {
-            background: none;
-            color: var(--blue);
-            margin-left: 16px;
+        /* Stats bar */
+        .stats {
+            background: var(--navy);
+            padding: 48px 24px;
         }
-
-        .hero-cta-secondary:hover {
-            background: var(--blue-light);
-        }
-
-        /* Scroll indicator */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
-            40% { transform: translateX(-50%) translateY(-10px); }
-            60% { transform: translateX(-50%) translateY(-5px); }
-        }
-
-        /* Section Styles */
-        .section {
-            padding: 120px 24px;
-        }
-
-        .section-dark {
-            background: var(--gray-800);
-            color: var(--white);
-        }
-
-        .section-light {
-            background: var(--gray-50);
-        }
-
-        .section-content {
-            max-width: 1200px;
+        .stats-content {
+            max-width: 1000px;
             margin: 0 auto;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 80px;
-        }
-
-        .section-header h2 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 700;
-            margin-bottom: 16px;
-            letter-spacing: -0.02em;
-        }
-
-        .section-header p {
-            font-size: 1.25rem;
-            color: var(--gray-600);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .section-dark .section-header p {
-            color: var(--gray-400);
-        }
-
-        /* Scam Types - Card Grid */
-        .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 24px;
-        }
-
-        .card {
-            background: var(--white);
-            border-radius: 24px;
-            padding: 40px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-
-        .card-icon {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin-bottom: 24px;
-        }
-
-        .card h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: var(--gray-800);
-        }
-
-        .card p {
-            color: var(--gray-600);
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-
-        /* Warning Signs - Visual List */
-        .warning-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 32px;
+            text-align: center;
         }
-
-        .warning-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 20px;
-        }
-
-        .warning-icon {
-            width: 48px;
-            height: 48px;
-            background: rgba(200, 16, 46, 0.1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            flex-shrink: 0;
-        }
-
-        .warning-text h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 4px;
+        .stat-item h3 {
+            font-size: 3rem;
+            font-weight: 800;
             color: var(--white);
+            margin-bottom: 8px;
         }
-
-        .warning-text p {
+        .stat-item p {
             color: var(--gray-400);
             font-size: 0.95rem;
         }
 
-        /* Emergency Section */
+        /* Section */
+        .section {
+            padding: 100px 24px;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+        .section-header h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--gray-600);
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        /* Scam cards - Infographic style */
+        .scam-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+        }
+        .scam-card {
+            background: var(--white);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+        .scam-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+        .scam-card-image {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .scam-card-image img {
+            max-height: 160px;
+            max-width: 100%;
+        }
+        .scam-card-content {
+            padding: 32px;
+            flex: 1;
+        }
+        .scam-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--gray-800);
+        }
+        .scam-card p {
+            color: var(--gray-600);
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+        .scam-card-link {
+            color: var(--blue);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Warning signs - Visual */
+        .warnings {
+            background: var(--gray-800);
+            padding: 100px 24px;
+        }
+        .warnings .section-header h2 { color: var(--white); }
+        .warnings .section-header p { color: var(--gray-400); }
+
+        .warning-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+        .warning-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 28px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .warning-icon {
+            width: 56px; height: 56px;
+            background: rgba(200,16,46,0.15);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            flex-shrink: 0;
+        }
+        .warning-text h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 6px;
+        }
+        .warning-text p {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Emergency CTA */
         .emergency {
+            padding: 80px 24px;
+        }
+        .emergency-box {
+            max-width: 900px;
+            margin: 0 auto;
             background: linear-gradient(135deg, var(--red) 0%, #a00d24 100%);
-            color: white;
             border-radius: 32px;
             padding: 64px;
             text-align: center;
-            margin: 0 24px;
-            max-width: 1152px;
-            margin-left: auto;
-            margin-right: auto;
+            color: white;
         }
-
-        .emergency h2 {
-            font-size: 2.5rem;
+        .emergency-box h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
             margin-bottom: 16px;
         }
-
-        .emergency p {
-            font-size: 1.25rem;
+        .emergency-box p {
+            font-size: 1.15rem;
             opacity: 0.95;
             margin-bottom: 32px;
         }
-
-        .emergency-actions {
+        .emergency-btns {
             display: flex;
             justify-content: center;
             gap: 16px;
             flex-wrap: wrap;
         }
-
         .emergency-btn {
             background: rgba(255,255,255,0.2);
             color: white;
-            padding: 16px 32px;
+            padding: 16px 28px;
             border-radius: 12px;
             font-weight: 600;
-            font-size: 1rem;
             border: none;
             cursor: pointer;
-            transition: background 0.2s;
+            font-size: 1rem;
         }
-
         .emergency-btn:hover {
             background: rgba(255,255,255,0.3);
         }
@@ -378,18 +343,7 @@
             text-align: center;
             color: var(--gray-600);
             font-size: 0.875rem;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-            margin-bottom: 24px;
-        }
-
-        .footer-links a {
-            color: var(--gray-600);
-            text-decoration: none;
+            border-top: 1px solid var(--gray-200);
         }
 
         /* Chat Widget */
@@ -399,57 +353,43 @@
             right: 24px;
             z-index: 1000;
         }
-
         .chat-toggle {
-            width: 60px;
-            height: 60px;
+            width: 64px; height: 64px;
             background: var(--blue);
             border: none;
             border-radius: 50%;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             cursor: pointer;
-            box-shadow: 0 4px 24px rgba(0,102,161,0.4);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            box-shadow: 0 8px 32px rgba(0,102,161,0.4);
+            transition: all 0.3s;
         }
-
         .chat-toggle:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 32px rgba(0,102,161,0.5);
         }
-
         .chat-toggle.active {
             background: var(--gray-600);
-            transform: rotate(180deg);
         }
-
         .chat-panel {
             position: absolute;
-            bottom: 76px;
+            bottom: 80px;
             right: 0;
             width: 400px;
-            max-height: 560px;
             background: var(--white);
             border-radius: 20px;
-            box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+            box-shadow: 0 16px 64px rgba(0,0,0,0.2);
             display: none;
             flex-direction: column;
             overflow: hidden;
         }
-
         .chat-panel.open {
             display: flex;
             animation: slideUp 0.3s ease;
         }
-
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         .chat-header {
             background: var(--blue);
             color: white;
@@ -458,12 +398,7 @@
             justify-content: space-between;
             align-items: center;
         }
-
-        .chat-header-info h3 {
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
+        .chat-header h3 { font-size: 1rem; font-weight: 600; }
         .chat-status {
             display: flex;
             align-items: center;
@@ -472,30 +407,20 @@
             opacity: 0.9;
             margin-top: 4px;
         }
-
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 8px; height: 8px;
             border-radius: 50%;
             background: #ffc107;
         }
-
         .status-dot.online { background: var(--green); }
-
         .chat-close {
             background: rgba(255,255,255,0.2);
             border: none;
             color: white;
-            width: 32px;
-            height: 32px;
+            width: 32px; height: 32px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
-
         .chat-messages {
             flex: 1;
             overflow-y: auto;
@@ -503,20 +428,14 @@
             background: var(--gray-50);
             max-height: 320px;
         }
-
         .message {
             margin-bottom: 16px;
             display: flex;
             gap: 10px;
         }
-
-        .message.user {
-            flex-direction: row-reverse;
-        }
-
+        .message.user { flex-direction: row-reverse; }
         .message-avatar {
-            width: 32px;
-            height: 32px;
+            width: 32px; height: 32px;
             border-radius: 50%;
             background: var(--blue);
             color: white;
@@ -527,35 +446,26 @@
             font-weight: 600;
             flex-shrink: 0;
         }
-
-        .message.user .message-avatar {
-            background: var(--gray-400);
-        }
-
+        .message.user .message-avatar { background: var(--gray-400); }
         .message-content {
             max-width: 75%;
             padding: 12px 16px;
             border-radius: 18px;
             font-size: 0.9rem;
-            line-height: 1.5;
         }
-
         .message.assistant .message-content {
             background: var(--white);
             color: var(--gray-800);
         }
-
         .message.user .message-content {
             background: var(--blue);
             color: white;
         }
-
         .chat-input-area {
             padding: 16px 20px;
             background: var(--white);
             border-top: 1px solid var(--gray-200);
         }
-
         .chat-input-wrapper {
             display: flex;
             gap: 10px;
@@ -563,7 +473,6 @@
             border-radius: 24px;
             padding: 4px 4px 4px 16px;
         }
-
         .chat-input {
             flex: 1;
             border: none;
@@ -572,136 +481,81 @@
             outline: none;
             padding: 8px 0;
         }
-
         .chat-send {
-            width: 40px;
-            height: 40px;
+            width: 40px; height: 40px;
             background: var(--blue);
             border: none;
             border-radius: 50%;
             color: white;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
         }
-
-        .chat-send:hover { background: var(--blue-dark); }
-        .chat-send:disabled { background: var(--gray-300); cursor: not-allowed; }
-
-        /* Typing indicator */
-        .typing {
-            display: flex;
-            gap: 4px;
-            padding: 12px 16px;
-        }
-
+        .chat-send:disabled { background: var(--gray-300); }
+        .typing { display: flex; gap: 4px; padding: 12px 16px; }
         .typing span {
-            width: 6px;
-            height: 6px;
+            width: 6px; height: 6px;
             background: var(--blue);
             border-radius: 50%;
             animation: typing 1.4s infinite ease-in-out;
         }
-
         .typing span:nth-child(1) { animation-delay: -0.32s; }
         .typing span:nth-child(2) { animation-delay: -0.16s; }
-
         @keyframes typing {
             0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
             40% { transform: scale(1); opacity: 1; }
         }
 
-        /* Settings Modal */
+        /* Modal */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.4);
+            background: rgba(0,0,0,0.5);
             backdrop-filter: blur(4px);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 2000;
         }
-
         .modal-overlay.open { display: flex; }
-
         .modal {
             background: var(--white);
             border-radius: 20px;
             padding: 40px;
-            max-width: 480px;
+            max-width: 440px;
             width: 90%;
-            box-shadow: 0 24px 64px rgba(0,0,0,0.2);
         }
-
-        .modal h2 {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-        }
-
-        .modal p {
-            color: var(--gray-600);
-            margin-bottom: 24px;
-            font-size: 0.95rem;
-        }
-
+        .modal h2 { font-size: 1.4rem; margin-bottom: 8px; }
+        .modal p { color: var(--gray-600); margin-bottom: 20px; font-size: 0.95rem; }
+        .modal code { background: var(--gray-100); padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; }
         .modal-input {
             width: 100%;
-            padding: 16px;
+            padding: 14px 16px;
             border: 1px solid var(--gray-200);
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 1rem;
-            margin-bottom: 24px;
-            outline: none;
-            transition: border-color 0.2s;
+            margin-bottom: 20px;
         }
-
-        .modal-input:focus { border-color: var(--blue); }
-
-        .modal-buttons {
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-        }
-
+        .modal-input:focus { outline: none; border-color: var(--blue); }
+        .modal-btns { display: flex; gap: 12px; justify-content: flex-end; }
         .modal-btn {
             padding: 12px 24px;
-            border-radius: 12px;
-            font-size: 0.95rem;
+            border-radius: 10px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .modal-btn.secondary {
-            background: var(--gray-100);
             border: none;
-            color: var(--gray-800);
         }
+        .modal-btn.secondary { background: var(--gray-100); }
+        .modal-btn.primary { background: var(--blue); color: white; }
 
-        .modal-btn.primary {
-            background: var(--blue);
-            border: none;
-            color: white;
-        }
-
-        .modal-btn.primary:hover { background: var(--blue-dark); }
-
-        /* Responsive */
         @media (max-width: 768px) {
             .nav-links a:not(:last-child) { display: none; }
-            .hero { padding: 100px 20px 60px; }
-            .section { padding: 80px 20px; }
-            .card-grid { grid-template-columns: 1fr; }
+            .stats-content { grid-template-columns: 1fr; gap: 24px; }
+            .scam-grid { grid-template-columns: 1fr; }
+            .warning-grid { grid-template-columns: 1fr; }
             .chat-panel { width: calc(100vw - 40px); right: -4px; }
-            .emergency { margin: 0 16px; padding: 40px 24px; }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="nav">
         <div class="nav-content">
             <div class="nav-logo">
@@ -710,140 +564,171 @@
             </div>
             <div class="nav-links">
                 <a href="#scams">Scam Types</a>
-                <a href="#signs">Warning Signs</a>
+                <a href="#signs">Red Flags</a>
                 <a href="#help">Get Help</a>
-                <button class="settings-btn" onclick="openSettings()" title="API Settings">&#9881;</button>
+                <button class="settings-btn" onclick="openSettings()" title="Settings">&#9881;</button>
             </div>
         </div>
     </nav>
 
-    <!-- Hero -->
     <section class="hero">
-        <p class="hero-eyebrow">Protect Yourself</p>
-        <h1>Think it's a scam?<br>Let's find out.</h1>
-        <p class="hero-subtitle">Our AI assistant helps Jersey residents identify suspicious messages, calls, and emails in seconds.</p>
-        <div>
-            <button class="hero-cta" onclick="openChat()">
-                <span>&#128172;</span> Ask the Assistant
-            </button>
+        <span class="hero-badge">Jersey Fraud Prevention</span>
+        <h1>Think it's a <span>scam?</span></h1>
+        <p class="hero-sub">Our AI assistant helps you identify suspicious messages, calls, and emails in seconds.</p>
+        <button class="hero-cta" onclick="openChat()">
+            &#128172; Ask the Assistant
+        </button>
+    </section>
+
+    <section class="stats">
+        <div class="stats-content">
+            <div class="stat-item">
+                <h3>£2.3M</h3>
+                <p>Lost to fraud in Jersey annually</p>
+            </div>
+            <div class="stat-item">
+                <h3>68%</h3>
+                <p>Of scams start with a text or email</p>
+            </div>
+            <div class="stat-item">
+                <h3>4 mins</h3>
+                <p>Average time to lose money once engaged</p>
+            </div>
         </div>
     </section>
 
-    <!-- Scam Types -->
-    <section id="scams" class="section section-light">
-        <div class="section-content">
-            <div class="section-header">
-                <h2>Know the threats.</h2>
-                <p>Scammers in Jersey use these common tactics. Learn to recognise them.</p>
-            </div>
-            <div class="card-grid">
-                <div class="card" onclick="askAbout('bank impersonation text or call')">
-                    <div class="card-icon">&#127970;</div>
+    <section id="scams" class="section">
+        <div class="section-header">
+            <h2>Know the threats</h2>
+            <p>Learn to recognise the most common scams targeting Jersey residents.</p>
+        </div>
+        <div class="scam-grid">
+            <div class="scam-card" onclick="askAbout('bank impersonation text or call')">
+                <div class="scam-card-image" style="background: #e8f4fc;">
+                    <img src="images/bank-scam.svg" alt="Bank Scam">
+                </div>
+                <div class="scam-card-content">
                     <h3>Bank Impersonation</h3>
-                    <p>Texts or calls claiming your account is compromised. They'll ask you to move money to a "safe" account — which belongs to them.</p>
+                    <p>Texts or calls claiming your account is compromised. They'll ask you to move money to a "safe account" — which belongs to the scammer.</p>
+                    <span class="scam-card-link">Check if it's a scam →</span>
                 </div>
-                <div class="card" onclick="askAbout('delivery fee scam text')">
-                    <div class="card-icon">&#128230;</div>
-                    <h3>Delivery Fees</h3>
-                    <p>A text says you need to pay a small fee to receive a parcel. The link steals your card details.</p>
+            </div>
+            <div class="scam-card" onclick="askAbout('delivery fee scam text')">
+                <div class="scam-card-image" style="background: #fef3e8;">
+                    <img src="images/delivery-scam.svg" alt="Delivery Scam">
                 </div>
-                <div class="card" onclick="askAbout('investment fraud cryptocurrency')">
-                    <div class="card-icon">&#128200;</div>
+                <div class="scam-card-content">
+                    <h3>Delivery Fee Scams</h3>
+                    <p>A text claims you need to pay £1.99 to receive a parcel. The link captures your card details and drains your account.</p>
+                    <span class="scam-card-link">Check if it's a scam →</span>
+                </div>
+            </div>
+            <div class="scam-card" onclick="askAbout('investment cryptocurrency fraud')">
+                <div class="scam-card-image" style="background: #e8f8ef;">
+                    <img src="images/investment-scam.svg" alt="Investment Scam">
+                </div>
+                <div class="scam-card-content">
                     <h3>Investment Fraud</h3>
-                    <p>Promises of guaranteed returns on crypto or overseas investments. If it sounds too good to be true, it is.</p>
+                    <p>Promises of guaranteed high returns on crypto or overseas investments. If it sounds too good to be true, it always is.</p>
+                    <span class="scam-card-link">Check if it's a scam →</span>
                 </div>
-                <div class="card" onclick="askAbout('Treasury and Exchequer tax scam call')">
-                    <div class="card-icon">&#127963;</div>
+            </div>
+            <div class="scam-card" onclick="askAbout('Treasury and Exchequer tax scam call')">
+                <div class="scam-card-image" style="background: #f0f4f8;">
+                    <img src="images/tax-scam.svg" alt="Tax Scam">
+                </div>
+                <div class="scam-card-content">
                     <h3>Tax Scams</h3>
-                    <p>Calls claiming to be from Treasury & Exchequer about unpaid taxes, threatening arrest unless you pay immediately.</p>
+                    <p>Calls claiming to be from Treasury & Exchequer about unpaid taxes, threatening immediate arrest unless you pay now.</p>
+                    <span class="scam-card-link">Check if it's a scam →</span>
                 </div>
-                <div class="card" onclick="askAbout('romance scam online dating')">
-                    <div class="card-icon">&#128149;</div>
+            </div>
+            <div class="scam-card" onclick="askAbout('romance scam online dating')">
+                <div class="scam-card-image" style="background: #fce8ee;">
+                    <img src="images/romance-scam.svg" alt="Romance Scam">
+                </div>
+                <div class="scam-card-content">
                     <h3>Romance Scams</h3>
-                    <p>Fake relationships built over weeks or months, ending with urgent requests for money. Jersey loses over £400k annually.</p>
+                    <p>Fake relationships built over weeks, ending with urgent requests for money. Jersey loses over £400k to these annually.</p>
+                    <span class="scam-card-link">Check if it's a scam →</span>
                 </div>
-                <div class="card" onclick="askAbout('tech support Microsoft Apple scam')">
-                    <div class="card-icon">&#128187;</div>
-                    <h3>Tech Support</h3>
-                    <p>Calls claiming your computer has a virus. They'll ask for remote access, then steal your data or install malware.</p>
+            </div>
+            <div class="scam-card" onclick="askAbout('tech support Microsoft Apple scam')">
+                <div class="scam-card-image" style="background: #f5f5f7;">
+                    <img src="images/tech-scam.svg" alt="Tech Support Scam">
+                </div>
+                <div class="scam-card-content">
+                    <h3>Tech Support Scams</h3>
+                    <p>Calls claiming your computer has a virus. They request remote access, then steal your data or install malware.</p>
+                    <span class="scam-card-link">Check if it's a scam →</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Warning Signs -->
-    <section id="signs" class="section section-dark">
-        <div class="section-content">
-            <div class="section-header">
-                <h2>Red flags to watch for.</h2>
-                <p>Scammers rely on urgency and emotion. Pause and look for these signs.</p>
+    <section id="signs" class="warnings">
+        <div class="section-header">
+            <h2>Red flags to watch for</h2>
+            <p>Scammers rely on urgency and emotion. Pause and look for these signs.</p>
+        </div>
+        <div class="warning-grid">
+            <div class="warning-item">
+                <div class="warning-icon">&#9888;</div>
+                <div class="warning-text">
+                    <h4>Urgency & Pressure</h4>
+                    <p>"Act now or your account will be closed" — legitimate organisations don't threaten you like this.</p>
+                </div>
             </div>
-            <div class="warning-grid">
-                <div class="warning-item">
-                    <div class="warning-icon">&#9888;</div>
-                    <div class="warning-text">
-                        <h4>Urgency & Pressure</h4>
-                        <p>"Act now or your account will be closed" — real organisations don't do this.</p>
-                    </div>
+            <div class="warning-item">
+                <div class="warning-icon">&#128179;</div>
+                <div class="warning-text">
+                    <h4>Unusual Payment Methods</h4>
+                    <p>Gift cards, cryptocurrency, or wire transfers. No real company asks for payment this way.</p>
                 </div>
-                <div class="warning-item">
-                    <div class="warning-icon">&#128179;</div>
-                    <div class="warning-text">
-                        <h4>Unusual Payments</h4>
-                        <p>Gift cards, crypto, or wire transfers. Legitimate companies don't ask for these.</p>
-                    </div>
+            </div>
+            <div class="warning-item">
+                <div class="warning-icon">&#128274;</div>
+                <div class="warning-text">
+                    <h4>Password or PIN Requests</h4>
+                    <p>Your bank will never ask for your PIN or full password. Not by phone, not by text. Ever.</p>
                 </div>
-                <div class="warning-item">
-                    <div class="warning-icon">&#128274;</div>
-                    <div class="warning-text">
-                        <h4>Password Requests</h4>
-                        <p>Your bank will never ask for your PIN or full password. Ever.</p>
-                    </div>
+            </div>
+            <div class="warning-item">
+                <div class="warning-icon">&#129323;</div>
+                <div class="warning-text">
+                    <h4>"Keep This Secret"</h4>
+                    <p>Scammers isolate their victims. If they tell you not to tell anyone, tell someone immediately.</p>
                 </div>
-                <div class="warning-item">
-                    <div class="warning-icon">&#129323;</div>
-                    <div class="warning-text">
-                        <h4>"Keep This Secret"</h4>
-                        <p>Scammers isolate victims. If they say don't tell anyone, tell someone.</p>
-                    </div>
+            </div>
+            <div class="warning-item">
+                <div class="warning-icon">&#127873;</div>
+                <div class="warning-text">
+                    <h4>Too Good to Be True</h4>
+                    <p>Won a lottery you didn't enter? Unexpected inheritance from abroad? It's always a scam.</p>
                 </div>
-                <div class="warning-item">
-                    <div class="warning-icon">&#127873;</div>
-                    <div class="warning-text">
-                        <h4>Too Good to Be True</h4>
-                        <p>Won a lottery you didn't enter? Unexpected inheritance? It's a scam.</p>
-                    </div>
-                </div>
-                <div class="warning-item">
-                    <div class="warning-icon">&#128241;</div>
-                    <div class="warning-text">
-                        <h4>Remote Access</h4>
-                        <p>Never let anyone you don't know take control of your computer.</p>
-                    </div>
+            </div>
+            <div class="warning-item">
+                <div class="warning-icon">&#128187;</div>
+                <div class="warning-text">
+                    <h4>Remote Access Requests</h4>
+                    <p>Never let anyone you don't know take control of your computer. This gives them everything.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Emergency -->
-    <section id="help" class="section">
-        <div class="emergency">
-            <h2>Already shared details or money?</h2>
-            <p>Time matters. Act fast to limit the damage.</p>
-            <div class="emergency-actions">
-                <button class="emergency-btn">&#128222; Call Your Bank Now</button>
-                <button class="emergency-btn">&#128694; Police: 01534 612612</button>
+    <section id="help" class="emergency">
+        <div class="emergency-box">
+            <h2>Already shared details or sent money?</h2>
+            <p>Time matters. The faster you act, the better your chance of recovery.</p>
+            <div class="emergency-btns">
+                <button class="emergency-btn">&#128222; Call Your Bank Immediately</button>
+                <button class="emergency-btn">&#128694; Police Fraud: 01534 612612</button>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
-        <div class="footer-links">
-            <a href="#">About</a>
-            <a href="#">Privacy</a>
-            <a href="#">Report a Scam</a>
-        </div>
         <p>A Jersey Fraud Prevention Forum Initiative</p>
     </footer>
 
@@ -851,7 +736,7 @@
     <div class="chat-widget">
         <div class="chat-panel" id="chatPanel">
             <div class="chat-header">
-                <div class="chat-header-info">
+                <div>
                     <h3>ScamAware Assistant</h3>
                     <div class="chat-status">
                         <span class="status-dot" id="statusDot"></span>
@@ -864,7 +749,7 @@
                 <div class="message assistant">
                     <div class="message-avatar">S</div>
                     <div class="message-content">
-                        Hi! Describe the message, call, or email you received and I'll help you work out if it's suspicious.
+                        Describe the message, call, or email you received and I'll help you work out if it's suspicious.
                     </div>
                 </div>
             </div>
@@ -882,9 +767,9 @@
     <div class="modal-overlay" id="settingsModal">
         <div class="modal">
             <h2>Connect to Server</h2>
-            <p>Enter your ngrok URL. You'll get a new URL each time you run <code>ngrok http 3000</code></p>
-            <input type="text" class="modal-input" id="apiUrlInput" placeholder="https://xxxx-xx-xx.ngrok-free.dev">
-            <div class="modal-buttons">
+            <p>Enter your ngrok URL. Check <code>OneDrive\scamaware-url.txt</code> for the current URL.</p>
+            <input type="text" class="modal-input" id="apiUrlInput" placeholder="https://xxxx.ngrok-free.dev">
+            <div class="modal-btns">
                 <button class="modal-btn secondary" onclick="closeSettings()">Cancel</button>
                 <button class="modal-btn primary" onclick="saveSettings()">Connect</button>
             </div>
@@ -907,53 +792,37 @@
         const settingsModal = document.getElementById('settingsModal');
         const apiUrlInput = document.getElementById('apiUrlInput');
 
-        if (API_URL) {
-            apiUrlInput.value = API_URL;
-            checkHealth();
-        } else {
-            updateStatus(false, 'Not connected');
-        }
+        if (API_URL) { apiUrlInput.value = API_URL; checkHealth(); }
+        else { updateStatus(false, 'Not connected'); }
 
-        function updateStatus(online, text) {
-            statusDot.className = 'status-dot' + (online ? ' online' : '');
-            statusText.textContent = text;
+        function updateStatus(on, txt) {
+            statusDot.className = 'status-dot' + (on ? ' online' : '');
+            statusText.textContent = txt;
         }
-
         function toggleChat() {
             chatOpen = !chatOpen;
             chatPanel.classList.toggle('open', chatOpen);
             chatToggle.classList.toggle('active', chatOpen);
-            if (chatOpen) {
-                chatInput.focus();
-                checkHealth();
-            }
+            if (chatOpen) { chatInput.focus(); checkHealth(); }
         }
-
         function openChat() { if (!chatOpen) toggleChat(); }
         function closeChat() { chatOpen = false; chatPanel.classList.remove('open'); chatToggle.classList.remove('active'); }
         function openSettings() { settingsModal.classList.add('open'); }
         function closeSettings() { settingsModal.classList.remove('open'); }
-
         function saveSettings() {
             API_URL = apiUrlInput.value.trim().replace(/\/$/, '');
-            if (API_URL) {
-                localStorage.setItem('scamaware_api_url', API_URL);
-                checkHealth();
-            }
+            if (API_URL) { localStorage.setItem('scamaware_api_url', API_URL); checkHealth(); }
             closeSettings();
         }
-
         async function checkHealth() {
-            if (!API_URL) { updateStatus(false, 'Not connected'); return false; }
+            if (!API_URL) { updateStatus(false, 'Not connected'); return; }
             try {
                 const r = await fetch(`${API_URL}/api/health`, { mode: 'cors' });
                 const d = await r.json();
-                if (d.status === 'ok') { updateStatus(true, 'Online'); return true; }
-            } catch (e) { console.error(e); }
+                if (d.status === 'ok') { updateStatus(true, 'Online'); return; }
+            } catch (e) {}
             updateStatus(false, 'Offline');
-            return false;
         }
-
         function addMessage(content, isUser = false) {
             const div = document.createElement('div');
             div.className = `message ${isUser ? 'user' : 'assistant'}`;
@@ -961,7 +830,6 @@
             chatMessages.appendChild(div);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
-
         function addTyping() {
             const div = document.createElement('div');
             div.className = 'message assistant';
@@ -970,20 +838,16 @@
             chatMessages.appendChild(div);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
-
         function removeTyping() { document.getElementById('typingIndicator')?.remove(); }
-
         async function sendMessage() {
             const msg = chatInput.value.trim();
             if (!msg || isLoading) return;
             if (!API_URL) { openSettings(); return; }
-
             isLoading = true;
             sendBtn.disabled = true;
             chatInput.value = '';
             addMessage(msg, true);
             addTyping();
-
             try {
                 const r = await fetch(`${API_URL}/api/chat`, {
                     method: 'POST',
@@ -992,27 +856,24 @@
                     body: JSON.stringify({ message: msg, history: conversationHistory })
                 });
                 removeTyping();
-                if (!r.ok) throw new Error('Failed');
+                if (!r.ok) throw new Error();
                 const d = await r.json();
                 conversationHistory.push({ role: 'user', content: msg }, { role: 'assistant', content: d.response });
                 if (conversationHistory.length > 20) conversationHistory = conversationHistory.slice(-20);
                 addMessage(d.response);
-            } catch (e) {
+            } catch {
                 removeTyping();
-                addMessage("Couldn't connect. Check the server URL in settings.");
+                addMessage("Couldn't connect. Check the server URL in settings (gear icon).");
             }
-
             isLoading = false;
             sendBtn.disabled = false;
             chatInput.focus();
         }
-
         function askAbout(topic) {
             openChat();
             chatInput.value = `Is this a scam: ${topic}`;
             sendMessage();
         }
-
         chatInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
         settingsModal.addEventListener('click', e => { if (e.target === settingsModal) closeSettings(); });
         setInterval(checkHealth, 30000);

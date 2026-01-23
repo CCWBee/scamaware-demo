@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Background -->
+  <circle cx="100" cy="100" r="90" fill="#fce8ee"/>
+  <!-- Phone/Dating app -->
+  <rect x="55" y="35" width="90" height="140" rx="12" fill="#1d1d1f"/>
+  <rect x="62" y="50" width="76" height="105" fill="#fff"/>
+  <!-- Profile picture placeholder -->
+  <circle cx="100" cy="85" r="25" fill="#e8e8ed"/>
+  <circle cx="100" cy="78" r="10" fill="#c4c4c4"/>
+  <ellipse cx="100" cy="100" rx="15" ry="10" fill="#c4c4c4"/>
+  <!-- Heart icons -->
+  <text x="75" y="125" font-family="Arial" font-size="18" fill="#e91e63">&#10084;</text>
+  <text x="115" y="125" font-family="Arial" font-size="18" fill="#e91e63">&#10084;</text>
+  <!-- Chat bubble with money request -->
+  <rect x="70" y="130" width="60" height="20" rx="4" fill="#e91e63"/>
+  <text x="100" y="143" font-family="Arial" font-size="8" fill="white" text-anchor="middle">Send £500 pls</text>
+  <!-- Fake mask overlay -->
+  <ellipse cx="155" cy="65" rx="30" ry="35" fill="none" stroke="#c8102e" stroke-width="3" stroke-dasharray="5,3"/>
+  <!-- Warning -->
+  <circle cx="160" cy="150" r="25" fill="#c8102e"/>
+  <text x="160" y="158" font-family="Arial" font-size="28" font-weight="bold" fill="white" text-anchor="middle">!</text>
+  <!-- Money flying away -->
+  <text x="40" y="80" font-family="Arial" font-size="16" fill="#28a745" opacity="0.6">£</text>
+  <text x="30" y="100" font-family="Arial" font-size="14" fill="#28a745" opacity="0.5">£</text>
+  <text x="45" y="120" font-family="Arial" font-size="12" fill="#28a745" opacity="0.4">£</text>
+</svg>

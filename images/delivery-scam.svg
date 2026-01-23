@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="boxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#d4a574;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#b8956c;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <circle cx="100" cy="100" r="90" fill="#fef3e8"/>
+  <!-- Package box -->
+  <rect x="45" y="60" width="90" height="80" fill="url(#boxGrad)" rx="4"/>
+  <!-- Box tape -->
+  <rect x="82" y="60" width="16" height="80" fill="#c9a066"/>
+  <rect x="45" y="90" width="90" height="16" fill="#c9a066"/>
+  <!-- Box flaps -->
+  <polygon points="45,60 90,35 90,60" fill="#e0bc8a"/>
+  <polygon points="135,60 90,35 90,60" fill="#c9a066"/>
+  <!-- Phone -->
+  <rect x="120" y="100" width="50" height="80" rx="6" fill="#1d1d1f"/>
+  <rect x="124" y="106" width="42" height="60" fill="#fff"/>
+  <!-- SMS bubble -->
+  <rect x="127" y="112" width="36" height="25" rx="4" fill="#c8102e"/>
+  <text x="145" y="122" font-family="Arial" font-size="8" fill="white" text-anchor="middle">PAY £1.99</text>
+  <text x="145" y="132" font-family="Arial" font-size="7" fill="white" text-anchor="middle">to receive</text>
+  <!-- Warning -->
+  <circle cx="55" cy="55" r="20" fill="#c8102e"/>
+  <text x="55" y="62" font-family="Arial" font-size="22" font-weight="bold" fill="white" text-anchor="middle">!</text>
+</svg>

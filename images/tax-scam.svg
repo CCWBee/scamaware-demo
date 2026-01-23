@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Background -->
+  <circle cx="100" cy="100" r="90" fill="#f0f4f8"/>
+  <!-- Document -->
+  <rect x="50" y="40" width="80" height="110" fill="white" rx="4" stroke="#ddd" stroke-width="2"/>
+  <!-- Document lines -->
+  <rect x="60" y="55" width="50" height="6" fill="#1a1f3d" rx="2"/>
+  <rect x="60" y="70" width="60" height="4" fill="#ddd" rx="2"/>
+  <rect x="60" y="82" width="55" height="4" fill="#ddd" rx="2"/>
+  <rect x="60" y="94" width="58" height="4" fill="#ddd" rx="2"/>
+  <!-- Red "URGENT" stamp -->
+  <rect x="55" y="110" width="55" height="20" fill="#c8102e" rx="3" transform="rotate(-15 82 120)"/>
+  <text x="82" y="124" font-family="Arial" font-size="10" fill="white" text-anchor="middle" font-weight="bold" transform="rotate(-15 82 120)">URGENT</text>
+  <!-- Phone with threatening call -->
+  <rect x="115" y="70" width="55" height="90" rx="8" fill="#1d1d1f"/>
+  <rect x="120" y="78" width="45" height="65" fill="#fff"/>
+  <!-- Caller ID -->
+  <circle cx="142" cy="95" r="15" fill="#c8102e"/>
+  <text x="142" y="100" font-family="Arial" font-size="16" fill="white" text-anchor="middle">&#128222;</text>
+  <text x="142" y="125" font-family="Arial" font-size="7" fill="#333" text-anchor="middle">Treasury</text>
+  <text x="142" y="135" font-family="Arial" font-size="7" fill="#333" text-anchor="middle">&amp; Exchequer</text>
+  <!-- Warning -->
+  <circle cx="55" cy="160" r="22" fill="#c8102e"/>
+  <text x="55" y="168" font-family="Arial" font-size="26" font-weight="bold" fill="white" text-anchor="middle">!</text>
+</svg>
