@@ -777,7 +777,9 @@
     </div>
 
     <script>
-        let API_URL = localStorage.getItem('scamaware_api_url') || '';
+        // DEFAULT_API_URL is auto-updated by startup script
+        const DEFAULT_API_URL = '';
+        let API_URL = localStorage.getItem('scamaware_api_url') || DEFAULT_API_URL;
         let conversationHistory = [];
         let isLoading = false;
         let chatOpen = false;
