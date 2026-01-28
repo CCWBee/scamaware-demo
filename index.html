@@ -7,897 +7,1728 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        /* ============================================
+           DESIGN TOKENS - Swiss Design System
+           ============================================ */
         :root {
-            --navy: #1a1f3d;
-            --blue: #0066a1;
-            --blue-dark: #004d7a;
-            --blue-light: #e8f4fc;
-            --red: #c8102e;
-            --green: #34c759;
-            --gray-50: #fbfbfd;
-            --gray-100: #f5f5f7;
-            --gray-200: #e8e8ed;
-            --gray-400: #86868b;
-            --gray-600: #6e6e73;
-            --gray-800: #1d1d1f;
-            --white: #ffffff;
+            /* Baseline unit */
+            --unit: 8px;
+            --baseline: 8px;
+            --baseline-offset: 0px; /* no longer needed */
+
+            /* Navigation height (explicit for offset calculations) */
+            --nav-height: 72px; /* real height, not computed */
+            --nav-block: var(--nav-height);
+
+            /* Brand alignment tokens */
+            --brand-mark: 12px;
+            --brand-gap: var(--space-2); /* 16px, matches actual gap */
+            --brand-offset: calc(var(--brand-mark) + var(--brand-gap));
+
+            /* Hero baseline nudge for fine-tuning */
+            --hero-baseline-nudge: 8px;
+
+            /* Grid column count (12 desktop, 4 mobile via media query) */
+            --grid-cols: 12;
+
+            /* Spacing scale (multiples of 8px) */
+            --space-1: 8px;
+            --space-2: 16px;
+            --space-3: 24px;
+            --space-4: 32px;
+            --space-5: 40px;
+            --space-6: 48px;
+            --space-7: 56px;
+            --space-8: 64px;
+            --space-9: 72px;
+            --space-10: 80px;
+            --space-12: 96px;
+
+            /* Grid */
+            --grid-max: 1152px;
+            --grid-gutter: 24px;
+            --grid-margin: clamp(24px, 6vw, 72px);
+
+            /* Typography */
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+            --h1-size: 48px;
+            --h1-weight: 600;
+            --h1-line: 56px;
+
+            --h2-size: 32px;
+            --h2-weight: 600;
+            --h2-line: 40px;
+
+            --h3-size: 24px;
+            --h3-weight: 600;
+            --h3-line: 32px;
+
+            --body-size: 16px;
+            --body-weight: 400;
+            --body-line: 24px;
+
+            --small-size: 14px;
+            --small-weight: 400;
+            --small-line: 20px;
+
+            --label-size: 12px;
+            --label-weight: 500;
+            --label-line: 16px;
+            --label-tracking: 0.02em;
+
+            /* Colors - Semantic only */
+            --bg: #FAFAFA;
+            --text-primary: #111111;
+            --text-secondary: #555555;
+            --hairline: #E0E0E0;
+            --critical: #DC2626;
+            --warning: #F59E0B;
+            --caution: #92700C; /* desaturated amber-brown, reads as caution not disabled */
+            --action: #2563EB;
+            --white: #FFFFFF;
+            --band-grey: #F0F0F0;
+
+            /* Transitions */
+            --transition-fast: 150ms ease;
+            --transition-medium: 200ms ease;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+        /* ============================================
+           RESET & BASE
+           ============================================ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--white);
-            color: var(--gray-800);
-            line-height: 1.6;
+            font-family: var(--font-family);
+            font-size: var(--body-size);
+            font-weight: var(--body-weight);
+            line-height: var(--body-line);
+            color: var(--text-primary);
+            background: var(--bg);
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Nav */
+        /* ============================================
+           TYPOGRAPHY
+           ============================================ */
+        h1 {
+            font-size: var(--h1-size);
+            font-weight: var(--h1-weight);
+            line-height: var(--h1-line);
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: var(--h2-size);
+            font-weight: var(--h2-weight);
+            line-height: var(--h2-line);
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-size: var(--h3-size);
+            font-weight: var(--h3-weight);
+            line-height: var(--h3-line);
+        }
+
+        /* Removed global p max-width - measure enforced by grid columns */
+
+        .label {
+            font-size: var(--label-size);
+            font-weight: var(--label-weight);
+            line-height: var(--label-line);
+            letter-spacing: var(--label-tracking);
+            text-transform: uppercase;
+        }
+
+        .small {
+            font-size: var(--small-size);
+            font-weight: var(--small-weight);
+            line-height: var(--small-line);
+        }
+
+        /* ============================================
+           GRID CONTAINER - 12 Column System
+           ============================================ */
+        .container {
+            max-width: var(--grid-max);
+            margin: 0 auto;
+            padding-left: var(--grid-margin);
+            padding-right: var(--grid-margin);
+        }
+
+        .grid-12 {
+            display: grid;
+            grid-template-columns: repeat(var(--grid-cols), 1fr);
+            gap: var(--grid-gutter);
+        }
+
+        /* Text alignment - left by default */
+        h1, h2, h3, h4, p, ul, ol {
+            text-align: left;
+        }
+
+        /* Body text narrow reading column */
+        .reading-width {
+            max-width: 65ch;
+        }
+
+        /* ============================================
+           NAVIGATION
+           ============================================ */
         .nav {
             position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 1000;
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: saturate(180%) blur(20px);
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
             border-bottom: 1px solid rgba(0,0,0,0.08);
+            z-index: 100;
         }
+
+        .nav::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 2px;
+            background: var(--action);
+            opacity: 0.9;
+        }
+
         .nav-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--nav-block);
+            padding-block: 0;
+            gap: var(--space-4);
+        }
+
+        .nav-wordmark {
+            display: inline-flex;
+            align-items: baseline;
+            gap: var(--brand-gap);
+        }
+
+        .nav-wordmark .mark {
+            width: var(--brand-mark);
+            height: var(--brand-mark);
+            background: var(--action);
+            flex: 0 0 auto;
+            transform: translateY(1px);
+        }
+
+        .nav-wordmark .wordmark {
+            display: inline-flex;
+            gap: 10px;
+            align-items: baseline;
+        }
+
+        .nav-wordmark .brand {
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+        }
+
+        .nav-wordmark .place {
+            font-weight: 400;
+            color: var(--text-secondary);
+            letter-spacing: 0;
+            opacity: 0.75;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--space-3);
+        }
+
+        .nav-links a {
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            color: var(--text-secondary);
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .nav-links a:hover {
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        /* ============================================
+           HERO SECTION - Asymmetric 12-col Layout
+           ============================================ */
+        .hero {
+            padding-top: calc(var(--nav-block) + var(--space-6));
+            padding-bottom: var(--space-10);
+            border-bottom: 1px solid var(--hairline);
+        }
+
+        .hero-grid {
+            align-items: start;
+        }
+
+        .hero-main {
+            grid-column: 1 / 8;
+            padding-top: var(--hero-baseline-nudge);
+        }
+
+        .hero-cta {
+            grid-column: 9 / 13;
+        }
+
+        .hero h1 {
+            margin-top: 0;
+            margin-bottom: var(--space-3);
+            max-width: 65ch;
+            letter-spacing: -0.03em;
+        }
+
+        .hero-intro {
+            color: var(--text-secondary);
+            margin-top: 0;
+            margin-bottom: var(--space-6);
+            max-width: 65ch;
+        }
+
+        /* Brand offset - align hero text to wordmark text (past the square) */
+        .hero-main h1,
+        .hero-main .hero-intro,
+        .protocol {
+            margin-left: var(--brand-offset);
+        }
+
+        /* Protocol Steps - Unified 12-col grid */
+        .protocol {
+            display: grid;
+            grid-template-columns: repeat(var(--grid-cols), 1fr);
+            gap: var(--grid-gutter);
+        }
+
+        .protocol-step {
+            grid-column: span 4;
+            padding-top: var(--space-3);
+            border-top: 1px solid var(--hairline);
+        }
+
+        .protocol-number {
+            font-size: 56px;
+            font-weight: 600;
+            line-height: 1;
+            margin-bottom: var(--space-2);
+        }
+
+        .protocol-step:nth-child(1) .protocol-number { color: var(--critical); }
+        .protocol-step:nth-child(2) .protocol-number { color: var(--warning); }
+        .protocol-step:nth-child(3) .protocol-number { color: var(--action); }
+
+        .protocol-title {
+            font-size: var(--h3-size);
+            font-weight: var(--h3-weight);
+            line-height: var(--h3-line);
+            margin-bottom: var(--space-1);
+        }
+
+        .protocol-desc {
+            font-size: var(--body-size);
+            color: var(--text-secondary);
+        }
+
+        /* CTA Block - typographic column, not a widget */
+        .cta-block {
+            border-left: 1px solid var(--hairline);
+            padding-left: var(--space-4);
+        }
+
+        .cta-block-title {
+            font-size: var(--h3-size);
+            font-weight: var(--h3-weight);
+            margin-bottom: var(--space-2);
+        }
+
+        .cta-block-text {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-3);
+            max-width: 65ch;
+        }
+
+        /* Primary CTA */
+        .cta-primary {
+            display: inline-block;
+            background: var(--action);
+            color: var(--white);
+            font-size: var(--body-size);
+            font-weight: 600;
+            padding: var(--space-2) var(--space-4);
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background var(--transition-fast);
+        }
+
+        .cta-primary:hover {
+            background: #1d4ed8;
+        }
+
+        /* ============================================
+           THREAT CATALOGUE - Typographic List (no cards)
+           ============================================ */
+        .threats {
+            padding-top: var(--space-10);
+            padding-bottom: var(--space-10);
+            border-bottom: 1px solid var(--hairline);
+        }
+
+        .threats h2 {
+            margin-bottom: var(--space-6);
+        }
+
+        .threat-list {
+            display: grid;
+            grid-template-columns: repeat(var(--grid-cols), 1fr);
+            gap: 0 var(--grid-gutter);
+        }
+
+        /* Consolidated threat-entry styles (all entries are buttons) */
+        .threat-entry {
+            grid-column: span 6;
+            padding: var(--space-3) 0;
+            border-top: 1px solid var(--hairline);
+            display: flex;
+            flex-direction: column;
+            background: none;
+            border-left: none;
+            border-right: none;
+            border-bottom: none;
+            text-align: left;
+            cursor: pointer;
+            width: 100%;
+            font: inherit;
+            color: inherit;
+        }
+
+        .threat-entry:focus {
+            outline: 2px solid var(--action);
+            outline-offset: 2px;
+        }
+
+        .threat-entry:hover .threat-name {
+            text-decoration: underline;
+        }
+
+        .threat-header {
+            display: flex;
+            align-items: baseline;
+            gap: var(--space-2);
+            margin-bottom: var(--space-1);
+        }
+
+        .severity {
+            font-size: var(--label-size);
+            font-weight: var(--label-weight);
+            letter-spacing: var(--label-tracking);
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-1);
+            width: 80px;
+            flex-shrink: 0;
+        }
+
+        .severity.critical {
+            color: var(--critical);
+        }
+
+        .severity.warning {
+            color: var(--warning);
+        }
+
+        .severity.caution {
+            color: var(--caution);
+        }
+
+        .threat-name {
+            font-size: var(--body-size);
+            font-weight: 600;
+        }
+
+        .threat-oneliner {
+            color: var(--text-secondary);
+            font-size: var(--small-size);
+            margin-bottom: var(--space-2);
+            max-width: 65ch;
+        }
+
+        .threat-signs-label {
+            font-size: var(--label-size);
+            font-weight: var(--label-weight);
+            letter-spacing: var(--label-tracking);
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-1);
+        }
+
+        .threat-signs {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .threat-signs li {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            padding-left: var(--space-3);
+            position: relative;
+            margin-bottom: var(--space-1);
+        }
+
+        .threat-signs li::before {
+            content: "-";
+            position: absolute;
+            left: 0;
+        }
+
+        /* ============================================
+           RED FLAGS - Typographic List (no cards)
+           ============================================ */
+        .redflags {
+            padding-top: var(--space-10);
+            padding-bottom: var(--space-10);
+            border-bottom: 1px solid var(--hairline);
+        }
+
+        .redflags h2 {
+            margin-bottom: var(--space-6);
+        }
+
+        .redflag-list {
+            display: grid;
+            grid-template-columns: repeat(var(--grid-cols), 1fr);
+            gap: 0 var(--grid-gutter);
+        }
+
+        .redflag-entry {
+            grid-column: span 6;
+            padding: var(--space-2) 0;
+            border-top: 1px solid var(--hairline);
+        }
+
+        .redflag-header {
+            display: flex;
+            align-items: baseline;
+            gap: var(--space-2);
+            margin-bottom: var(--space-1);
+        }
+
+        .redflag-name {
+            font-size: var(--body-size);
+            font-weight: 600;
+        }
+
+        .redflag-desc {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            max-width: 65ch;
+        }
+
+        /* ============================================
+           EMERGENCY SECTION - Full-width band
+           ============================================ */
+        .emergency {
+            background: var(--band-grey);
+            padding-top: var(--space-6);
+            padding-bottom: var(--space-6);
+        }
+
+        .emergency > .container {
+            display: grid;
+            grid-template-columns: repeat(var(--grid-cols), 1fr);
+            gap: var(--grid-gutter);
+        }
+
+        .emergency > .container > * {
+            grid-column: 1 / 8;
+        }
+
+        .emergency-label {
+            font-size: var(--label-size);
+            font-weight: var(--label-weight);
+            letter-spacing: var(--label-tracking);
+            text-transform: uppercase;
+            color: var(--critical);
+            margin-bottom: var(--space-2);
+        }
+
+        .emergency h2 {
+            margin-bottom: var(--space-4);
+            max-width: 14em;
+        }
+
+        .emergency-checklist {
+            list-style: none;
+            margin-bottom: var(--space-4);
+        }
+
+        .emergency-checklist li {
+            font-size: var(--body-size);
+            padding: var(--space-1) 0;
+            padding-left: var(--space-4);
+            position: relative;
+            border-bottom: 1px solid var(--hairline);
+        }
+
+        .emergency-checklist li::before {
+            content: attr(data-step);
+            position: absolute;
+            left: 0;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .emergency-phone {
+            display: inline-block;
+            font-size: var(--h3-size);
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-bottom: 2px solid var(--text-primary);
+            transition: border-color var(--transition-fast);
+        }
+
+        .emergency-phone:hover {
+            border-color: var(--action);
+            color: var(--action);
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            padding-top: var(--space-4);
+            padding-bottom: var(--space-4);
+            border-top: 1px solid var(--hairline);
+        }
+
+        .footer-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .nav-logo {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--navy);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+
+        .footer-identity {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
         }
-        .nav-logo-icon {
-            width: 32px; height: 32px;
-            background: var(--blue);
-            border-radius: 8px;
+
+        .footer-links {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
+            gap: var(--space-4);
         }
-        .nav-links {
-            display: flex;
-            gap: 28px;
-            align-items: center;
-        }
-        .nav-links a {
-            color: var(--gray-600);
+
+        .footer-links a {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
             text-decoration: none;
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-        .nav-links a:hover { color: var(--gray-800); }
-        .settings-btn {
-            background: none;
-            border: none;
-            color: var(--gray-400);
-            cursor: pointer;
-            padding: 8px;
-            font-size: 1.2rem;
+            transition: color var(--transition-fast);
         }
 
-        /* Hero */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 120px 24px 80px;
-            background: linear-gradient(180deg, #fff 0%, var(--gray-50) 100%);
-        }
-        .hero-badge {
-            display: inline-block;
-            background: var(--blue-light);
-            color: var(--blue);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 24px;
-        }
-        .hero h1 {
-            font-size: clamp(3rem, 10vw, 5.5rem);
-            font-weight: 800;
-            color: var(--gray-800);
-            line-height: 1.05;
-            margin-bottom: 24px;
-            letter-spacing: -0.03em;
-        }
-        .hero h1 span { color: var(--blue); }
-        .hero-sub {
-            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-            color: var(--gray-600);
-            max-width: 600px;
-            margin-bottom: 40px;
-        }
-        .hero-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--blue);
-            color: white;
-            padding: 18px 40px;
-            border-radius: 980px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .hero-cta:hover {
-            background: var(--blue-dark);
-            transform: scale(1.02);
+        .footer-links a:hover {
+            color: var(--text-primary);
         }
 
-        /* Stats bar */
-        .stats {
-            background: var(--navy);
-            padding: 48px 24px;
-        }
-        .stats-content {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 32px;
-            text-align: center;
-        }
-        .stat-item h3 {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--white);
-            margin-bottom: 8px;
-        }
-        .stat-item p {
-            color: var(--gray-400);
-            font-size: 0.95rem;
-        }
-
-        /* Section */
-        .section {
-            padding: 100px 24px;
-        }
-        .section-header {
-            text-align: center;
-            margin-bottom: 64px;
-        }
-        .section-header h2 {
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 800;
-            margin-bottom: 16px;
-            letter-spacing: -0.02em;
-        }
-        .section-header p {
-            font-size: 1.2rem;
-            color: var(--gray-600);
-            max-width: 550px;
-            margin: 0 auto;
-        }
-
-        /* Scam cards - Infographic style */
-        .scam-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 32px;
-        }
-        .scam-card {
-            background: var(--white);
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            transition: all 0.4s ease;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-        }
-        .scam-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-        }
-        .scam-card-image {
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-        }
-        .scam-card-image img {
-            max-height: 160px;
-            max-width: 100%;
-        }
-        .scam-card-content {
-            padding: 32px;
-            flex: 1;
-        }
-        .scam-card h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--gray-800);
-        }
-        .scam-card p {
-            color: var(--gray-600);
-            line-height: 1.7;
-            margin-bottom: 16px;
-        }
-        .scam-card-link {
-            color: var(--blue);
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* Warning signs - Visual */
-        .warnings {
-            background: var(--gray-800);
-            padding: 100px 24px;
-        }
-        .warnings .section-header h2 { color: var(--white); }
-        .warnings .section-header p { color: var(--gray-400); }
-
-        .warning-grid {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-        }
-        .warning-item {
-            background: rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 28px;
-            display: flex;
-            gap: 20px;
-            align-items: flex-start;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .warning-icon {
-            width: 56px; height: 56px;
-            background: rgba(200,16,46,0.15);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            flex-shrink: 0;
-        }
-        .warning-text h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--white);
-            margin-bottom: 6px;
-        }
-        .warning-text p {
-            color: var(--gray-400);
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        /* Emergency CTA */
-        .emergency {
-            padding: 80px 24px;
-        }
-        .emergency-box {
-            max-width: 900px;
-            margin: 0 auto;
-            background: linear-gradient(135deg, var(--red) 0%, #a00d24 100%);
-            border-radius: 32px;
-            padding: 64px;
-            text-align: center;
-            color: white;
-        }
-        .emergency-box h2 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-        .emergency-box p {
-            font-size: 1.15rem;
-            opacity: 0.95;
-            margin-bottom: 32px;
-        }
-        .emergency-btns {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-        .emergency-btn {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            padding: 16px 28px;
-            border-radius: 12px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            text-decoration: none;
-            display: inline-block;
-            transition: background 0.2s;
-        }
-        .emergency-btn:hover {
-            background: rgba(255,255,255,0.3);
-        }
-        .emergency-btn:active {
-            background: rgba(255,255,255,0.4);
-        }
-
-        /* Footer */
-        .footer {
-            padding: 48px 24px;
-            text-align: center;
-            color: var(--gray-600);
-            font-size: 0.875rem;
-            border-top: 1px solid var(--gray-200);
-        }
-
-        /* Chat Widget */
+        /* ============================================
+           CHAT WIDGET - Fixed position, triggered from CTA
+           ============================================ */
         .chat-widget {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
+            bottom: var(--space-3);
+            right: var(--space-3);
             z-index: 1000;
         }
+
         .chat-toggle {
-            width: 64px; height: 64px;
-            background: var(--blue);
+            background: var(--action);
+            color: var(--white);
             border: none;
-            border-radius: 50%;
-            color: white;
-            font-size: 1.6rem;
+            padding: var(--space-2) var(--space-3);
+            font-size: var(--body-size);
+            font-weight: 600;
+            font-family: var(--font-family);
             cursor: pointer;
-            box-shadow: 0 8px 32px rgba(0,102,161,0.4);
-            transition: all 0.3s;
+            transition: background var(--transition-fast);
         }
+
         .chat-toggle:hover {
-            transform: scale(1.05);
+            background: #1d4ed8;
         }
+
         .chat-toggle.active {
-            background: var(--gray-600);
+            background: var(--text-secondary);
         }
+
         .chat-panel {
             position: absolute;
-            bottom: 80px;
+            bottom: calc(100% + var(--space-2));
             right: 0;
             width: 400px;
             background: var(--white);
-            border-radius: 20px;
-            box-shadow: 0 16px 64px rgba(0,0,0,0.2);
+            border: 1px solid var(--hairline);
             display: none;
             flex-direction: column;
-            overflow: hidden;
+            max-height: 500px;
         }
+
         .chat-panel.open {
             display: flex;
-            animation: slideUp 0.3s ease;
+            animation: fadeIn var(--transition-medium);
         }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
         .chat-header {
-            background: var(--blue);
-            color: white;
-            padding: 20px 24px;
+            padding: var(--space-2) var(--space-3);
+            border-bottom: 1px solid var(--hairline);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            z-index: 2;
         }
-        .chat-header h3 { font-size: 1rem; font-weight: 600; }
-        .chat-status {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.75rem;
-            opacity: 0.9;
-            margin-top: 4px;
+
+        .chat-header-title {
+            font-size: var(--body-size);
+            font-weight: 600;
         }
-        .status-dot {
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            background: #ffc107;
-        }
-        .status-dot.online { background: var(--green); }
+
         .chat-close {
-            background: rgba(255,255,255,0.2);
+            background: none;
             border: none;
-            color: white;
-            width: 32px; height: 32px;
-            border-radius: 50%;
+            font-size: var(--body-size);
+            color: var(--text-secondary);
             cursor: pointer;
+            padding: var(--space-1);
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-tap-highlight-color: transparent;
         }
+
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding: 20px;
-            background: var(--gray-50);
-            max-height: 320px;
-        }
-        .message {
-            margin-bottom: 16px;
-            display: flex;
-            gap: 10px;
-        }
-        .message.user { flex-direction: row-reverse; }
-        .message-avatar {
-            width: 32px; height: 32px;
-            border-radius: 50%;
-            background: var(--blue);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-        .message.user .message-avatar { background: var(--gray-400); }
-        .message-content {
-            max-width: 75%;
-            padding: 12px 16px;
-            border-radius: 18px;
-            font-size: 0.9rem;
-        }
-        .message.assistant .message-content {
+            padding: var(--space-3);
             background: var(--white);
-            color: var(--gray-800);
-        }
-        .message.user .message-content {
-            background: var(--blue);
-            color: white;
-        }
-        .chat-input-area {
-            padding: 16px 20px;
-            background: var(--white);
-            border-top: 1px solid var(--gray-200);
-        }
-        .chat-input-wrapper {
-            display: flex;
-            gap: 10px;
-            background: var(--gray-100);
-            border-radius: 24px;
-            padding: 4px 4px 4px 16px;
-        }
-        .chat-input {
-            flex: 1;
-            border: none;
-            background: none;
-            font-size: 0.9rem;
-            outline: none;
-            padding: 8px 0;
-        }
-        .chat-send {
-            width: 40px; height: 40px;
-            background: var(--blue);
-            border: none;
-            border-radius: 50%;
-            color: white;
-            cursor: pointer;
-        }
-        .chat-send:disabled { background: var(--gray-300); }
-        .typing { display: flex; gap: 4px; padding: 12px 16px; }
-        .typing span {
-            width: 6px; height: 6px;
-            background: var(--blue);
-            border-radius: 50%;
-            animation: typing 1.4s infinite ease-in-out;
-        }
-        .typing span:nth-child(1) { animation-delay: -0.32s; }
-        .typing span:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes typing {
-            0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-            40% { transform: scale(1); opacity: 1; }
+            min-height: 200px;
+            max-height: 300px;
         }
 
-        /* Modal */
+        .message {
+            padding: var(--space-2) 0;
+            border-bottom: 1px solid var(--hairline);
+        }
+
+        .message:last-child {
+            border-bottom: none;
+        }
+
+        .message-label {
+            font-size: var(--label-size);
+            font-weight: var(--label-weight);
+            letter-spacing: var(--label-tracking);
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-1);
+        }
+
+        .message.user .message-label {
+            color: var(--text-primary);
+        }
+
+        .message-content {
+            font-size: var(--small-size);
+            line-height: var(--small-line);
+            color: var(--text-primary);
+        }
+
+        .message.user .message-content {
+            font-weight: 400;
+        }
+
+        .message.assistant .message-content {
+            font-weight: 500;
+        }
+
+        .chat-input-area {
+            padding: var(--space-2) var(--space-3);
+            border-top: 1px solid var(--hairline);
+            display: flex;
+            gap: var(--space-2);
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 1px solid var(--hairline);
+            padding: var(--space-1) var(--space-2);
+            font-size: var(--body-size);
+            font-family: var(--font-family);
+            outline: none;
+        }
+
+        .chat-input:focus {
+            border-color: var(--action);
+        }
+
+        .chat-send {
+            background: var(--action);
+            color: var(--white);
+            border: none;
+            padding: var(--space-1) var(--space-2);
+            font-size: var(--body-size);
+            cursor: pointer;
+            transition: background var(--transition-fast);
+        }
+
+        .chat-send:hover {
+            background: #1d4ed8;
+        }
+
+        .chat-send:disabled {
+            background: var(--hairline);
+            cursor: not-allowed;
+        }
+
+        .chat-status {
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+          padding: var(--space-2) var(--space-3);
+          border-bottom: 1px solid var(--hairline);
+          background: var(--white);
+        }
+
+        .chat-status-label {
+          font-size: var(--label-size);
+          font-weight: 500;
+          letter-spacing: 0.02em;
+          text-transform: uppercase;
+          color: var(--text-secondary);
+        }
+
+        .chat-status-value {
+          font-size: var(--label-size);
+          font-weight: 500;
+          letter-spacing: 0.02em;
+          text-transform: uppercase;
+          color: var(--text-secondary);
+        }
+
+        .chat-status[data-state="online"] .chat-status-value {
+          color: var(--text-secondary);
+        }
+
+        .chat-status[data-state="connecting"] .chat-status-value {
+          color: var(--text-secondary);
+          opacity: 0.85;
+        }
+
+        .chat-status[data-state="offline"] .chat-status-value {
+          color: var(--caution);
+        }
+
+        .typing {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            padding: var(--space-1) 0;
+        }
+
+        /* ============================================
+           DISCLAIMER MODAL
+           ============================================ */
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.5);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 2000;
         }
-        .modal-overlay.open { display: flex; }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
         .modal {
             background: var(--white);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 440px;
+            max-width: 480px;
             width: 90%;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
-        .modal h2 { font-size: 1.4rem; margin-bottom: 8px; }
-        .modal p { color: var(--gray-600); margin-bottom: 20px; font-size: 0.95rem; }
-        .modal code { background: var(--gray-100); padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; }
-        .modal-input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid var(--gray-200);
-            border-radius: 10px;
-            font-size: 1rem;
-            margin-bottom: 20px;
+
+        .modal-header {
+            padding: var(--space-3);
+            border-bottom: 1px solid var(--hairline);
         }
-        .modal-input:focus { outline: none; border-color: var(--blue); }
-        .modal-btns { display: flex; gap: 12px; justify-content: flex-end; }
+
+        .modal-header-label {
+            font-size: var(--label-size);
+            font-weight: var(--label-weight);
+            letter-spacing: var(--label-tracking);
+            text-transform: uppercase;
+            color: var(--warning);
+            margin-bottom: var(--space-1);
+        }
+
+        .modal-header h2 {
+            font-size: var(--h3-size);
+            font-weight: var(--h3-weight);
+            line-height: var(--h3-line);
+        }
+
+        .modal-body {
+            padding: var(--space-3);
+            overflow-y: auto;
+            flex: 1;
+            max-height: 60vh;
+        }
+
+        .modal-body p {
+            margin-bottom: var(--space-2);
+            color: var(--text-secondary);
+        }
+
+        .modal-body ul {
+            margin-bottom: var(--space-3);
+            padding-left: var(--space-3);
+        }
+
+        .modal-body li {
+            margin-bottom: var(--space-1);
+            color: var(--text-secondary);
+            font-size: var(--small-size);
+        }
+
+        .modal-footer {
+            padding: var(--space-3);
+            border-top: 1px solid var(--hairline);
+            display: flex;
+            gap: var(--space-2);
+            justify-content: flex-end;
+        }
+
         .modal-btn {
-            padding: 12px 24px;
-            border-radius: 10px;
-            font-weight: 500;
+            padding: var(--space-2) var(--space-3);
+            font-size: var(--body-size);
+            font-weight: 600;
+            font-family: var(--font-family);
             cursor: pointer;
             border: none;
+            transition: background var(--transition-fast);
         }
-        .modal-btn.secondary { background: var(--gray-100); }
-        .modal-btn.primary { background: var(--blue); color: white; }
 
-        @media (max-width: 768px) {
-            .nav-links a { display: none; }
-            .nav-logo span { display: none; }
-            .hero { min-height: auto; padding: 100px 20px 60px; }
-            .hero h1 { font-size: 2.5rem; }
-            .hero-sub { font-size: 1rem; margin-bottom: 30px; }
-            .hero-cta { padding: 16px 32px; font-size: 1rem; }
-            .stats { padding: 32px 20px; }
-            .stats-content { grid-template-columns: 1fr; gap: 20px; }
-            .stat-item h3 { font-size: 2.2rem; }
-            .section { padding: 60px 20px; }
-            .section-header { margin-bottom: 40px; }
-            .section-header p { font-size: 1rem; }
-            .scam-grid { grid-template-columns: 1fr; gap: 20px; }
-            .scam-card-image { height: 160px; }
-            .scam-card-content { padding: 24px; }
-            .scam-card h3 { font-size: 1.25rem; }
-            .warnings { padding: 60px 20px; }
-            .warning-grid { grid-template-columns: 1fr; gap: 16px; }
-            .warning-item { padding: 20px; }
-            .warning-icon { width: 48px; height: 48px; font-size: 1.4rem; }
-            .emergency { padding: 40px 20px; }
-            .emergency-box { padding: 40px 24px; border-radius: 24px; }
-            .emergency-box h2 { font-size: 1.5rem; }
-            .emergency-box p { font-size: 1rem; }
-            .emergency-btns { flex-direction: column; }
-            .emergency-btn { width: 100%; text-align: center; }
-            /* Full-screen chat on mobile */
-            .chat-widget { bottom: 16px; right: 16px; }
-            .chat-toggle { width: 56px; height: 56px; font-size: 1.4rem; }
+        .modal-btn.secondary {
+            background: var(--bg);
+            color: var(--text-secondary);
+        }
+
+        .modal-btn.secondary:hover {
+            background: var(--hairline);
+        }
+
+        .modal-btn.primary {
+            background: var(--action);
+            color: var(--white);
+        }
+
+        .modal-btn.primary:hover {
+            background: #1d4ed8;
+        }
+
+        /* Desktop-only utility */
+        .desktop-hide {
+            display: none;
+        }
+
+        @media (min-width: 901px) {
+            .desktop-hide {
+                display: none;
+            }
+
+            .mobile-only {
+                display: none;
+            }
+
+            /* Hide floating chat toggle on desktop - CTA button opens chat */
+            .chat-toggle {
+                display: none;
+            }
+        }
+
+        /* ============================================
+           RESPONSIVE - Swiss Mobile Doctrine
+           ============================================ */
+        @media (max-width: 900px) {
+            /* 1. MOBILE GRID SYSTEM - 4 column via variable */
+            :root {
+                --grid-cols: 4;
+                --grid-margin: clamp(16px, 4vw, 24px);
+                --h1-size: 36px;
+                --h1-line: 44px;
+            }
+
+            .grid-12 {
+                gap: var(--space-2);
+            }
+
+            .container {
+                padding-inline: clamp(16px, 4vw, 24px);
+            }
+
+            /* 9. NO CENTERING ON MOBILE - everything left-aligned */
+            h1, h2, h3, h4, p, ul, ol {
+                text-align: left;
+            }
+
+            /* 10. REMOVE max-width constraints on mobile */
+            .reading-width,
+            .hero h1,
+            .hero-intro,
+            .cta-block-text,
+            .threat-oneliner,
+            .redflag-desc {
+                max-width: none;
+            }
+
+            /* Remove brand offset on mobile */
+            .hero-main h1,
+            .hero-main .hero-intro,
+            .protocol {
+                margin-left: 0;
+            }
+
+            .desktop-hide {
+                display: inline-block;
+            }
+
+            /* 7. NAV ON MOBILE - typographic, not hamburger */
+            .nav-links {
+                gap: var(--space-3);
+            }
+
+            .nav-links a {
+                font-size: var(--small-size);
+            }
+
+            /* 2. HERO MOBILE ORDER - stacked with hairline CTA field */
+            .hero-grid.grid-12 {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .hero-main {
+                grid-column: 1 / -1;
+            }
+
+            .hero-cta {
+                grid-column: 1 / -1;
+                border-top: 1px solid var(--hairline);
+                padding-top: var(--space-4);
+                margin-top: var(--space-4);
+            }
+
+            /* CTA block on mobile - distinct action field */
+            .cta-block {
+                border-left: none;
+                padding-left: 0;
+            }
+
+            /* 3. PROTOCOL ON MOBILE - spans full 4-col grid */
+            .protocol {
+                grid-template-columns: repeat(var(--grid-cols), 1fr);
+                gap: var(--space-3);
+            }
+
+            .protocol-step {
+                grid-column: 1 / -1; /* spans all 4 columns, maintains grid language */
+                padding-top: var(--space-3);
+            }
+
+            .protocol-number {
+                font-size: 48px;
+            }
+
+            /* 4. CATALOGUE (THREATS/RED FLAGS) ON MOBILE - full span entries */
+            .threat-entry {
+                grid-column: 1 / -1;
+                padding: var(--space-3) 0;
+            }
+
+            .redflag-entry {
+                grid-column: 1 / -1;
+                padding: var(--space-2) 0;
+            }
+
+            /* 5. BASELINE RHYTHM ON MOBILE - tokenized spacing */
+            .threats,
+            .redflags {
+                padding-top: var(--space-6);
+                padding-bottom: var(--space-6);
+            }
+
+            .threats h2,
+            .redflags h2 {
+                margin-bottom: var(--space-4);
+            }
+
+            .threat-header,
+            .redflag-header {
+                margin-bottom: var(--space-2);
+            }
+
+            .threat-oneliner {
+                margin-bottom: var(--space-3);
+            }
+
+            /* 6. TWO RHYTHMS - ALTERNATING DENSITY */
+            /* Airy sections on mobile */
+            .cta-block {
+                padding-top: var(--space-4);
+                padding-bottom: var(--space-4);
+            }
+
+            .emergency {
+                padding: var(--space-6) 0;
+            }
+
+            /* EMERGENCY SECTION ON MOBILE - airy band */
+            .emergency > .container {
+                grid-template-columns: 1fr;
+            }
+
+            .emergency > .container > * {
+                grid-column: 1 / -1;
+            }
+
+            .emergency h2 {
+                max-width: none;
+            }
+
+            /* 8. CHAT BOTTOM BAR ON MOBILE - full-width system element */
+            .chat-widget {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                border-radius: 0;
+                box-shadow: none;
+                border-top: 1px solid var(--hairline);
+                background: var(--white);
+                z-index: 1000;
+                pointer-events: none;
+            }
+
+            .chat-toggle,
+            .chat-panel {
+                pointer-events: auto;
+            }
+
+            .chat-toggle {
+                width: 100%;
+                border-radius: 0;
+            }
+
             .chat-panel {
                 position: fixed;
-                top: 0; left: 0; right: 0; bottom: 0;
-                width: 100%; height: 100%;
-                border-radius: 0;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                height: 100dvh;
                 max-height: none;
+                display: none;            /* closed state */
+                flex-direction: column;
+                border-radius: 0;
             }
-            .chat-messages { max-height: none; flex: 1; }
-            .chat-header { padding: 16px 20px; }
-            .settings-btn { display: none; }
+
+            .chat-panel.open {
+                display: flex;            /* open state */
+            }
+
+            .chat-header {
+                flex: 0 0 auto;
+            }
+
+            .chat-status {
+                flex: 0 0 auto;
+            }
+
+            .chat-messages {
+                flex: 1 1 auto;
+                overflow-y: auto;
+                min-height: 0;
+            }
+
+            .chat-input-area {
+                flex: 0 0 auto;
+                padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom));
+            }
+
+            /* Footer adjustments */
+            .footer-content {
+                flex-direction: column;
+                gap: var(--space-2);
+                align-items: flex-start;
+            }
+
+            /* Add bottom padding to footer to account for fixed chat bar */
+            .footer {
+                padding-bottom: calc(var(--space-4) + 56px);
+            }
         }
 
-        /* Improve touch targets */
-        @media (pointer: coarse) {
-            .scam-card { min-height: 44px; }
-            .emergency-btn { min-height: 52px; }
-            .chat-send { width: 48px; height: 48px; }
-            .nav-links a { padding: 8px; }
+        @media (max-width: 600px) {
+            /* Smaller breakpoint - keep all nav links visible (Swiss: no hidden nav) */
+            .nav-wordmark .brand,
+            .nav-wordmark .place {
+                font-size: var(--label-size);
+            }
+
+            .nav-wordmark .mark {
+                width: 8px;
+                height: 8px;
+            }
+
+            /* Let the nav links wrap onto a second row if needed */
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: flex-end;
+                row-gap: var(--space-1);
+                column-gap: var(--space-2);
+            }
+
+            /* Never allow internal wrapping within a link label */
+            .nav-links a {
+                white-space: nowrap;
+                overflow-wrap: normal;
+                word-break: keep-all;
+                font-size: 11px;
+                letter-spacing: 0.03em;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+                line-height: 40px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Navigation -->
     <nav class="nav">
-        <div class="nav-content">
-            <div class="nav-logo">
-                <div class="nav-logo-icon">S</div>
-                <span>ScamAware Jersey</span>
-            </div>
+        <div class="container nav-content">
+            <span class="nav-wordmark">
+              <span class="mark" aria-hidden="true"></span>
+              <span class="wordmark">
+                <span class="brand">ScamAware</span>
+                <span class="place">Jersey</span>
+              </span>
+            </span>
             <div class="nav-links">
-                <a href="#scams">Scam Types</a>
-                <a href="#signs">Red Flags</a>
-                <a href="#help">Get Help</a>
-                <button class="settings-btn" onclick="openSettings()" title="Settings">&#9881;</button>
+                <a href="#threats">Threats</a>
+                <a href="#redflags">Red Flags</a>
+                <a href="#emergency">Emergency</a>
             </div>
         </div>
     </nav>
 
+    <!-- Hero Section - Asymmetric Grid -->
     <section class="hero">
-        <span class="hero-badge">Jersey Fraud Prevention</span>
-        <h1>Think it's a <span>scam?</span></h1>
-        <p class="hero-sub">Our AI assistant helps you identify suspicious messages, calls, and emails in seconds.</p>
-        <button class="hero-cta" onclick="openChat()">
-            &#128172; Ask the Assistant
-        </button>
-    </section>
+        <div class="container">
+            <div class="grid-12 hero-grid">
+                <div class="hero-main">
+                    <h1>Received something suspicious?</h1>
+                    <p class="hero-intro">Follow the Stop, Challenge, Protect protocol before acting.</p>
 
-    <section class="stats">
-        <div class="stats-content">
-            <div class="stat-item">
-                <h3>£2.3M</h3>
-                <p>Lost to fraud in Jersey annually</p>
-            </div>
-            <div class="stat-item">
-                <h3>68%</h3>
-                <p>Of scams start with a text or email</p>
-            </div>
-            <div class="stat-item">
-                <h3>4 mins</h3>
-                <p>Average time to lose money once engaged</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="scams" class="section">
-        <div class="section-header">
-            <h2>Know the threats</h2>
-            <p>Learn to recognise the most common scams targeting Jersey residents.</p>
-        </div>
-        <div class="scam-grid">
-            <div class="scam-card" onclick="askAbout('bank impersonation text or call')">
-                <div class="scam-card-image" style="background: #e8f4fc;">
-                    <img src="images/bank-scam.svg" alt="Bank Scam">
-                </div>
-                <div class="scam-card-content">
-                    <h3>Bank Impersonation</h3>
-                    <p>Texts or calls claiming your account is compromised. They'll ask you to move money to a "safe account" — which belongs to the scammer.</p>
-                    <span class="scam-card-link">Check if it's a scam →</span>
-                </div>
-            </div>
-            <div class="scam-card" onclick="askAbout('delivery fee scam text')">
-                <div class="scam-card-image" style="background: #fef3e8;">
-                    <img src="images/delivery-scam.svg" alt="Delivery Scam">
-                </div>
-                <div class="scam-card-content">
-                    <h3>Delivery Fee Scams</h3>
-                    <p>A text claims you need to pay £1.99 to receive a parcel. The link captures your card details and drains your account.</p>
-                    <span class="scam-card-link">Check if it's a scam →</span>
-                </div>
-            </div>
-            <div class="scam-card" onclick="askAbout('investment cryptocurrency fraud')">
-                <div class="scam-card-image" style="background: #e8f8ef;">
-                    <img src="images/investment-scam.svg" alt="Investment Scam">
-                </div>
-                <div class="scam-card-content">
-                    <h3>Investment Fraud</h3>
-                    <p>Promises of guaranteed high returns on crypto or overseas investments. If it sounds too good to be true, it always is.</p>
-                    <span class="scam-card-link">Check if it's a scam →</span>
-                </div>
-            </div>
-            <div class="scam-card" onclick="askAbout('Treasury and Exchequer tax scam call')">
-                <div class="scam-card-image" style="background: #f0f4f8;">
-                    <img src="images/tax-scam.svg" alt="Tax Scam">
-                </div>
-                <div class="scam-card-content">
-                    <h3>Tax Scams</h3>
-                    <p>Calls claiming to be from Treasury & Exchequer about unpaid taxes, threatening immediate arrest unless you pay now.</p>
-                    <span class="scam-card-link">Check if it's a scam →</span>
-                </div>
-            </div>
-            <div class="scam-card" onclick="askAbout('romance scam online dating')">
-                <div class="scam-card-image" style="background: #fce8ee;">
-                    <img src="images/romance-scam.svg" alt="Romance Scam">
-                </div>
-                <div class="scam-card-content">
-                    <h3>Romance Scams</h3>
-                    <p>Fake relationships built over weeks, ending with urgent requests for money. Jersey loses over £400k to these annually.</p>
-                    <span class="scam-card-link">Check if it's a scam →</span>
-                </div>
-            </div>
-            <div class="scam-card" onclick="askAbout('tech support Microsoft Apple scam')">
-                <div class="scam-card-image" style="background: #f5f5f7;">
-                    <img src="images/tech-scam.svg" alt="Tech Support Scam">
-                </div>
-                <div class="scam-card-content">
-                    <h3>Tech Support Scams</h3>
-                    <p>Calls claiming your computer has a virus. They request remote access, then steal your data or install malware.</p>
-                    <span class="scam-card-link">Check if it's a scam →</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="signs" class="warnings">
-        <div class="section-header">
-            <h2>Red flags to watch for</h2>
-            <p>Scammers rely on urgency and emotion. Pause and look for these signs.</p>
-        </div>
-        <div class="warning-grid">
-            <div class="warning-item">
-                <div class="warning-icon">&#9888;</div>
-                <div class="warning-text">
-                    <h4>Urgency & Pressure</h4>
-                    <p>"Act now or your account will be closed" — legitimate organisations don't threaten you like this.</p>
-                </div>
-            </div>
-            <div class="warning-item">
-                <div class="warning-icon">&#128179;</div>
-                <div class="warning-text">
-                    <h4>Unusual Payment Methods</h4>
-                    <p>Gift cards, cryptocurrency, or wire transfers. No real company asks for payment this way.</p>
-                </div>
-            </div>
-            <div class="warning-item">
-                <div class="warning-icon">&#128274;</div>
-                <div class="warning-text">
-                    <h4>Password or PIN Requests</h4>
-                    <p>Your bank will never ask for your PIN or full password. Not by phone, not by text. Ever.</p>
-                </div>
-            </div>
-            <div class="warning-item">
-                <div class="warning-icon">&#129323;</div>
-                <div class="warning-text">
-                    <h4>"Keep This Secret"</h4>
-                    <p>Scammers isolate their victims. If they tell you not to tell anyone, tell someone immediately.</p>
-                </div>
-            </div>
-            <div class="warning-item">
-                <div class="warning-icon">&#127873;</div>
-                <div class="warning-text">
-                    <h4>Too Good to Be True</h4>
-                    <p>Won a lottery you didn't enter? Unexpected inheritance from abroad? It's always a scam.</p>
-                </div>
-            </div>
-            <div class="warning-item">
-                <div class="warning-icon">&#128187;</div>
-                <div class="warning-text">
-                    <h4>Remote Access Requests</h4>
-                    <p>Never let anyone you don't know take control of your computer. This gives them everything.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="help" class="emergency">
-        <div class="emergency-box">
-            <h2>Already shared details or sent money?</h2>
-            <p>Time matters. The faster you act, the better your chance of recovery.</p>
-            <div class="emergency-btns">
-                <a href="tel:+441234567890" class="emergency-btn">&#128222; Call Your Bank</a>
-                <a href="tel:+441534612612" class="emergency-btn">&#128694; Police Fraud: 01534 612612</a>
-            </div>
-        </div>
-    </section>
-
-    <footer class="footer">
-        <p>A Jersey Fraud Prevention Forum Initiative</p>
-    </footer>
-
-    <!-- Chat Widget -->
-    <div class="chat-widget">
-        <div class="chat-panel" id="chatPanel">
-            <div class="chat-header">
-                <div>
-                    <h3>ScamAware Assistant</h3>
-                    <div class="chat-status">
-                        <span class="status-dot" id="statusDot"></span>
-                        <span id="statusText">Connecting...</span>
+                    <div class="protocol">
+                        <div class="protocol-step">
+                            <div class="protocol-number">1</div>
+                            <h3 class="protocol-title">Stop</h3>
+                            <p class="protocol-desc">Do not respond. Do not click. Take time before acting.</p>
+                        </div>
+                        <div class="protocol-step">
+                            <div class="protocol-number">2</div>
+                            <h3 class="protocol-title">Challenge</h3>
+                            <p class="protocol-desc">Do not comply. End the call. Only criminals rush you.</p>
+                        </div>
+                        <div class="protocol-step">
+                            <div class="protocol-number">3</div>
+                            <h3 class="protocol-title">Protect</h3>
+                            <p class="protocol-desc">If unsure, verify. Contact your bank using a trusted number.</p>
+                        </div>
                     </div>
                 </div>
-                <button class="chat-close" onclick="closeChat()">&#10005;</button>
+                <div class="hero-cta">
+                    <div class="cta-block">
+                        <p class="cta-block-title">Check It Now</p>
+                        <p class="cta-block-text">Describe what you received. Get an instant assessment.</p>
+                        <button class="cta-primary" onclick="openChat()">Start Check</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Threat Catalogue - Typographic List -->
+    <section id="threats" class="threats">
+        <div class="container">
+            <h2>Threat Catalogue</h2>
+
+            <div class="threat-list">
+                <button class="threat-entry" type="button" onclick="askAbout('bank impersonation text or call')">
+                    <div class="threat-header">
+                        <span class="severity critical">&#9632; CRITICAL</span>
+                        <span class="threat-name">Bank Impersonation</span>
+                    </div>
+                    <p class="threat-oneliner">Texts or calls claiming your account is compromised, requesting money transfers.</p>
+                    <p class="threat-signs-label">Common signs</p>
+                    <ul class="threat-signs">
+                        <li>Asks for PIN or password</li>
+                        <li>Demands immediate action</li>
+                        <li>Requests money transfer</li>
+                    </ul>
+                </button>
+
+                <button class="threat-entry" type="button" onclick="askAbout('delivery fee scam text')">
+                    <div class="threat-header">
+                        <span class="severity caution">&#9632; CAUTION</span>
+                        <span class="threat-name">Delivery Fee Scams</span>
+                    </div>
+                    <p class="threat-oneliner">Texts claiming payment required for parcel delivery to capture card details.</p>
+                    <p class="threat-signs-label">Common signs</p>
+                    <ul class="threat-signs">
+                        <li>Requests card details</li>
+                        <li>Unexpected contact</li>
+                        <li>Small fee requested</li>
+                    </ul>
+                </button>
+
+                <button class="threat-entry" type="button" onclick="askAbout('investment cryptocurrency fraud')">
+                    <div class="threat-header">
+                        <span class="severity critical">&#9632; CRITICAL</span>
+                        <span class="threat-name">Investment Fraud</span>
+                    </div>
+                    <p class="threat-oneliner">Promises of guaranteed high returns on crypto or overseas investments.</p>
+                    <p class="threat-signs-label">Common signs</p>
+                    <ul class="threat-signs">
+                        <li>Guaranteed returns promised</li>
+                        <li>Pressure to keep it secret</li>
+                        <li>Urgency to invest now</li>
+                    </ul>
+                </button>
+
+                <button class="threat-entry" type="button" onclick="askAbout('Treasury and Exchequer tax scam call')">
+                    <div class="threat-header">
+                        <span class="severity critical">&#9632; CRITICAL</span>
+                        <span class="threat-name">Tax Scams</span>
+                    </div>
+                    <p class="threat-oneliner">Calls claiming to be from Treasury threatening arrest unless you pay.</p>
+                    <p class="threat-signs-label">Common signs</p>
+                    <ul class="threat-signs">
+                        <li>Threatens arrest</li>
+                        <li>Demands immediate payment</li>
+                        <li>Impersonates authority</li>
+                    </ul>
+                </button>
+
+                <button class="threat-entry" type="button" onclick="askAbout('romance scam online dating')">
+                    <div class="threat-header">
+                        <span class="severity critical">&#9632; CRITICAL</span>
+                        <span class="threat-name">Romance Scams</span>
+                    </div>
+                    <p class="threat-oneliner">Fake relationships built over weeks, ending with urgent requests for money.</p>
+                    <p class="threat-signs-label">Common signs</p>
+                    <ul class="threat-signs">
+                        <li>Requests secrecy</li>
+                        <li>Asks for money or gifts</li>
+                        <li>Never met in person</li>
+                    </ul>
+                </button>
+
+                <button class="threat-entry" type="button" onclick="askAbout('tech support Microsoft Apple scam')">
+                    <div class="threat-header">
+                        <span class="severity critical">&#9632; CRITICAL</span>
+                        <span class="threat-name">Tech Support Scams</span>
+                    </div>
+                    <p class="threat-oneliner">Calls claiming your computer has a virus, requesting remote access.</p>
+                    <p class="threat-signs-label">Common signs</p>
+                    <ul class="threat-signs">
+                        <li>Requests remote access</li>
+                        <li>Asks for payment</li>
+                        <li>Unexpected contact</li>
+                    </ul>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Red Flags - Typographic List -->
+    <section id="redflags" class="redflags">
+        <div class="container">
+            <h2>Red Flags</h2>
+
+            <div class="redflag-list">
+                <div class="redflag-entry">
+                    <div class="redflag-header">
+                        <span class="severity critical">&#9632; CRITICAL</span>
+                        <span class="redflag-name">Asks for PIN, Password or Login</span>
+                    </div>
+                    <p class="redflag-desc">Your bank will never ask for these by phone, text, or email.</p>
+                </div>
+
+                <div class="redflag-entry">
+                    <div class="redflag-header">
+                        <span class="severity critical">&#9632; CRITICAL</span>
+                        <span class="redflag-name">Keep This Secret</span>
+                    </div>
+                    <p class="redflag-desc">Scammers isolate victims. If told not to tell anyone, tell someone immediately.</p>
+                </div>
+
+                <div class="redflag-entry">
+                    <div class="redflag-header">
+                        <span class="severity critical">&#9632; CRITICAL</span>
+                        <span class="redflag-name">Remote Access Requests</span>
+                    </div>
+                    <p class="redflag-desc">Never let anyone unknown control your computer. This gives them access to everything.</p>
+                </div>
+
+                <div class="redflag-entry">
+                    <div class="redflag-header">
+                        <span class="severity critical">&#9632; CRITICAL</span>
+                        <span class="redflag-name">Threats of Arrest or Legal Action</span>
+                    </div>
+                    <p class="redflag-desc">Real authorities do not threaten arrest over the phone demanding immediate payment.</p>
+                </div>
+
+                <div class="redflag-entry">
+                    <div class="redflag-header">
+                        <span class="severity caution">&#9632; CAUTION</span>
+                        <span class="redflag-name">Urgency and Pressure</span>
+                    </div>
+                    <p class="redflag-desc">Act now or lose your account. Legitimate organisations give you time to think.</p>
+                </div>
+
+                <div class="redflag-entry">
+                    <div class="redflag-header">
+                        <span class="severity caution">&#9632; CAUTION</span>
+                        <span class="redflag-name">Unusual Payment Methods</span>
+                    </div>
+                    <p class="redflag-desc">Gift cards, cryptocurrency, or wire transfers. No real company asks for these.</p>
+                </div>
+
+                <div class="redflag-entry">
+                    <div class="redflag-header">
+                        <span class="severity caution">&#9632; CAUTION</span>
+                        <span class="redflag-name">Too Good to Be True</span>
+                    </div>
+                    <p class="redflag-desc">Won a lottery you did not enter. Unexpected inheritance. It is a scam.</p>
+                </div>
+
+                <div class="redflag-entry">
+                    <div class="redflag-header">
+                        <span class="severity caution">&#9632; CAUTION</span>
+                        <span class="redflag-name">Unexpected Contact</span>
+                    </div>
+                    <p class="redflag-desc">You did not initiate contact. Verify using official channels.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Section -->
+    <section id="emergency" class="emergency">
+        <div class="container">
+            <p class="emergency-label">URGENT</p>
+            <h2>Already shared details?</h2>
+
+            <ol class="emergency-checklist">
+                <li data-step="1.">Contact your bank immediately using the number on your card</li>
+                <li data-step="2.">Change passwords for any compromised accounts</li>
+                <li data-step="3.">Report to States of Jersey Police</li>
+                <li data-step="4.">Document everything you shared</li>
+            </ol>
+
+            <a href="tel:+441534612612" class="emergency-phone">Police Fraud: 01534 612612</a>
+        </div>
+    </section>
+
+    <!-- Chat Widget - Fixed position, triggered from CTA -->
+    <div class="chat-widget" id="chatWidget">
+        <button class="chat-toggle" id="chatToggle" onclick="toggleChat()">Check a message</button>
+        <div class="chat-panel" id="chatPanel">
+            <div class="chat-header">
+                <span class="chat-header-title">Verify a Message</span>
+                <button class="chat-close" onclick="closeChat()">x</button>
+            </div>
+            <div class="chat-status" id="chatStatus" role="status" aria-live="polite">
+              <span class="chat-status-label">Status</span>
+              <span class="chat-status-value" id="chatStatusValue">Connecting…</span>
             </div>
             <div class="chat-messages" id="chatMessages">
                 <div class="message assistant">
-                    <div class="message-avatar">S</div>
+                    <div class="message-label">Assistant</div>
                     <div class="message-content">
-                        Describe the message, call, or email you received and I'll help you work out if it's suspicious.
+                        Describe the message, call, or email you received. I will help you assess whether it is suspicious and what to do next.
                     </div>
                 </div>
             </div>
             <div class="chat-input-area">
-                <div class="chat-input-wrapper">
-                    <input type="text" class="chat-input" id="chatInput" placeholder="Describe what you received..." autocomplete="off">
-                    <button class="chat-send" id="sendBtn" onclick="sendMessage()">&#10148;</button>
+                <input type="text" class="chat-input" id="chatInput" placeholder="Describe what you received" autocomplete="off">
+                <button class="chat-send" id="sendBtn" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <span class="footer-identity">Jersey Fraud Prevention Forum</span>
+                <div class="footer-links">
+                    <a href="#" onclick="openDisclaimerModal(); return false;">AI Disclaimer</a>
+                    <a href="#">Privacy</a>
+                    <a href="#">Accessibility</a>
                 </div>
             </div>
         </div>
-        <button class="chat-toggle" id="chatToggle" onclick="toggleChat()">&#128172;</button>
-    </div>
+    </footer>
 
-    <!-- Settings Modal -->
-    <div class="modal-overlay" id="settingsModal">
+    <!-- AI Disclaimer Modal -->
+    <div class="modal-overlay" id="disclaimerModal">
         <div class="modal">
-            <h2>Connect to Server</h2>
-            <p>Enter your ngrok URL. Check <code>OneDrive\scamaware-url.txt</code> for the current URL.</p>
-            <input type="text" class="modal-input" id="apiUrlInput" placeholder="https://xxxx.ngrok-free.dev">
-            <div class="modal-btns">
-                <button class="modal-btn secondary" onclick="closeSettings()">Cancel</button>
-                <button class="modal-btn primary" onclick="saveSettings()">Connect</button>
+            <div class="modal-header">
+                <p class="modal-header-label">IMPORTANT</p>
+                <h2>AI Disclaimer</h2>
+            </div>
+            <div class="modal-body">
+                <p>This AI chatbot is provided for informational purposes only.</p>
+                <ul>
+                    <li>AI makes mistakes. Responses may be incorrect, incomplete, or misleading.</li>
+                    <li>This is not professional, legal, or financial advice.</li>
+                    <li>Verify information with official sources such as States of Jersey Police or Jersey Financial Services Commission.</li>
+                    <li>ScamAware Jersey accepts no liability for actions taken based on AI content.</li>
+                    <li>In emergency situations, call 999 immediately.</li>
+                </ul>
+                <p>By proceeding, you acknowledge these limitations.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn secondary" onclick="declineDisclaimer()">Decline</button>
+                <button class="modal-btn primary" onclick="acceptDisclaimer()">I Understand</button>
             </div>
         </div>
     </div>
 
+
     <script>
-        // DEFAULT_API_URL is auto-updated by startup script - always use it
-        const DEFAULT_API_URL = 'https://overlate-controllingly-jenise.ngrok-free.dev';
-        // Clear any stale cached URLs and always use default
-        localStorage.removeItem('scamaware_api_url');
-        let API_URL = DEFAULT_API_URL;
+        // Configuration - API URL hardcoded, no user-visible settings
+        const API_URL = 'https://overlate-controllingly-jenise.ngrok-free.dev';
         let conversationHistory = [];
         let isLoading = false;
         let chatOpen = false;
+        let disclaimerAccepted = sessionStorage.getItem('scamaware_disclaimer_accepted') === 'true';
+        let pendingChatAction = null;
 
+        // DOM Elements
         const chatPanel = document.getElementById('chatPanel');
         const chatToggle = document.getElementById('chatToggle');
         const chatMessages = document.getElementById('chatMessages');
         const chatInput = document.getElementById('chatInput');
         const sendBtn = document.getElementById('sendBtn');
-        const statusDot = document.getElementById('statusDot');
-        const statusText = document.getElementById('statusText');
-        const settingsModal = document.getElementById('settingsModal');
-        const apiUrlInput = document.getElementById('apiUrlInput');
+        const disclaimerModal = document.getElementById('disclaimerModal');
 
-        if (API_URL) { apiUrlInput.value = API_URL; checkHealth(); }
-        else { updateStatus(false, 'Not connected'); }
+        // Status checking
+        const READY_URL = `${API_URL}/readyz`;
+        let readyOk = false;
 
-        function updateStatus(on, txt) {
-            statusDot.className = 'status-dot' + (on ? ' online' : '');
-            statusText.textContent = txt;
+        const chatStatusEl = document.getElementById('chatStatus');
+        const chatStatusValue = document.getElementById('chatStatusValue');
+
+        function setStatus(state, text) {
+          if (!chatStatusEl) return;
+          chatStatusEl.dataset.state = state;
+          chatStatusValue.textContent = text;
+
+          const canSend = (state === 'online');
+          sendBtn.disabled = !canSend || isLoading;
         }
+
+        async function checkBackendReady() {
+          if (navigator.onLine === false) {
+            readyOk = false;
+            setStatus('offline', 'Offline');
+            return false;
+          }
+
+          setStatus('connecting', 'Connecting…');
+
+          try {
+            const r = await fetch(READY_URL, {
+              method: 'GET',
+              cache: 'no-store',
+              mode: 'cors',
+              headers: { 'ngrok-skip-browser-warning': 'true' }
+            });
+
+            readyOk = r.ok;
+            setStatus(readyOk ? 'online' : 'offline', readyOk ? 'Online' : 'Offline');
+            return readyOk;
+          } catch {
+            readyOk = false;
+            setStatus('offline', 'Offline');
+            return false;
+          }
+        }
+
+        function openDisclaimerModal() {
+            disclaimerModal.classList.add('open');
+        }
+
+        function showDisclaimerModal(callback) {
+            pendingChatAction = callback;
+            disclaimerModal.classList.add('open');
+        }
+
+        function acceptDisclaimer() {
+            disclaimerAccepted = true;
+            sessionStorage.setItem('scamaware_disclaimer_accepted', 'true');
+            disclaimerModal.classList.remove('open');
+            if (pendingChatAction) {
+                pendingChatAction();
+                pendingChatAction = null;
+            }
+        }
+
+        function declineDisclaimer() {
+            disclaimerModal.classList.remove('open');
+            pendingChatAction = null;
+        }
+
+        function scrollChatToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
         function toggleChat() {
+            if (!disclaimerAccepted) {
+                showDisclaimerModal(() => {
+                    chatOpen = true;
+                    chatPanel.classList.add('open');
+                    chatToggle.classList.add('active');
+                    checkBackendReady();
+                    requestAnimationFrame(() => {
+                        scrollChatToBottom();
+                        chatInput.focus();
+                    });
+                });
+                return;
+            }
             chatOpen = !chatOpen;
             chatPanel.classList.toggle('open', chatOpen);
             chatToggle.classList.toggle('active', chatOpen);
-            if (chatOpen) { chatInput.focus(); checkHealth(); }
-        }
-        function openChat() { if (!chatOpen) toggleChat(); }
-        function closeChat() { chatOpen = false; chatPanel.classList.remove('open'); chatToggle.classList.remove('active'); }
-        function openSettings() { settingsModal.classList.add('open'); }
-        function closeSettings() { settingsModal.classList.remove('open'); }
-        function saveSettings() {
-            API_URL = apiUrlInput.value.trim().replace(/\/$/, '');
-            if (API_URL) { localStorage.setItem('scamaware_api_url', API_URL); checkHealth(); }
-            closeSettings();
-        }
-        async function checkHealth() {
-            if (!API_URL) { updateStatus(false, 'Not connected'); return; }
-            try {
-                const r = await fetch(`${API_URL}/api/health`, {
-                    mode: 'cors',
-                    headers: { 'ngrok-skip-browser-warning': 'true' }
+            if (chatOpen) {
+                checkBackendReady();
+                requestAnimationFrame(() => {
+                    scrollChatToBottom();
+                    chatInput.focus();
                 });
-                const d = await r.json();
-                if (d.status === 'ok') { updateStatus(true, 'Online'); return; }
-            } catch (e) {}
-            updateStatus(false, 'Offline');
+            }
         }
+
+        function openChat() {
+            if (!disclaimerAccepted) {
+                showDisclaimerModal(() => {
+                    chatOpen = true;
+                    chatPanel.classList.add('open');
+                    chatToggle.classList.add('active');
+                    checkBackendReady();
+                    requestAnimationFrame(() => {
+                        scrollChatToBottom();
+                        chatInput.focus();
+                    });
+                });
+                return;
+            }
+            if (!chatOpen) {
+                chatOpen = true;
+                chatPanel.classList.add('open');
+                chatToggle.classList.add('active');
+                checkBackendReady();
+                requestAnimationFrame(() => {
+                    scrollChatToBottom();
+                    chatInput.focus();
+                });
+            }
+        }
+
+        function closeChat() {
+            chatOpen = false;
+            chatPanel.classList.remove('open');
+            chatToggle.classList.remove('active');
+        }
+
         function addMessage(content, isUser = false) {
             const div = document.createElement('div');
             div.className = `message ${isUser ? 'user' : 'assistant'}`;
-            div.innerHTML = `<div class="message-avatar">${isUser ? 'You' : 'S'}</div><div class="message-content">${content.replace(/\n/g, '<br>')}</div>`;
+            div.innerHTML = `<div class="message-label">${isUser ? 'You' : 'Assistant'}</div><div class="message-content">${content.replace(/\n/g, '<br>')}</div>`;
             chatMessages.appendChild(div);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            scrollChatToBottom();
         }
+
         function addTyping() {
             const div = document.createElement('div');
             div.className = 'message assistant';
             div.id = 'typingIndicator';
-            div.innerHTML = `<div class="message-avatar">S</div><div class="typing"><span></span><span></span><span></span></div>`;
+            div.innerHTML = `<div class="message-label">Assistant</div><div class="typing">Responding...</div>`;
             chatMessages.appendChild(div);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            scrollChatToBottom();
         }
-        function removeTyping() { document.getElementById('typingIndicator')?.remove(); }
+
+        function removeTyping() {
+            document.getElementById('typingIndicator')?.remove();
+        }
+
         async function sendMessage() {
+            if (!readyOk) {
+              const ok = await checkBackendReady();
+              if (!ok) {
+                addMessage("Service unavailable. Please try again shortly.");
+                return;
+              }
+            }
             const msg = chatInput.value.trim();
             if (!msg || isLoading) return;
-            if (!API_URL) { openSettings(); return; }
             isLoading = true;
             sendBtn.disabled = true;
             chatInput.value = '';
@@ -919,22 +1750,57 @@
                 conversationHistory.push({ role: 'user', content: msg }, { role: 'assistant', content: d.response });
                 if (conversationHistory.length > 20) conversationHistory = conversationHistory.slice(-20);
                 addMessage(d.response);
+                readyOk = true;
+                setStatus('online', 'Online');
             } catch {
                 removeTyping();
-                addMessage("Couldn't connect. Check the server URL in settings (gear icon).");
+                addMessage("Unable to connect to the server. Please try again later.");
+                readyOk = false;
+                setStatus(navigator.onLine === false ? 'offline' : 'offline', 'Offline');
             }
             isLoading = false;
             sendBtn.disabled = false;
             chatInput.focus();
         }
+
         function askAbout(topic) {
+            if (!disclaimerAccepted) {
+                showDisclaimerModal(() => {
+                    chatOpen = true;
+                    chatPanel.classList.add('open');
+                    chatToggle.classList.add('active');
+                    chatInput.value = `Is this a scam: ${topic}`;
+                    checkBackendReady();
+                    sendMessage();
+                });
+                return;
+            }
             openChat();
             chatInput.value = `Is this a scam: ${topic}`;
             sendMessage();
         }
-        chatInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
-        settingsModal.addEventListener('click', e => { if (e.target === settingsModal) closeSettings(); });
-        setInterval(checkHealth, 30000);
+
+        chatInput.addEventListener('keypress', e => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        disclaimerModal.addEventListener('click', e => {
+            if (e.target === disclaimerModal) declineDisclaimer();
+        });
+
+        window.addEventListener('online', () => {
+          if (chatOpen) checkBackendReady();
+        });
+
+        window.addEventListener('offline', () => {
+          readyOk = false;
+          setStatus('offline', 'Offline');
+        });
+
+        // Force initial closed state on load
+        chatOpen = false;
+        chatPanel.classList.remove('open');
+        chatToggle.classList.remove('active');
     </script>
 </body>
 </html>
