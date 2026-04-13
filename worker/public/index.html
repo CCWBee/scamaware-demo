@@ -1048,9 +1048,20 @@
             max-height: 60vh;
         }
 
+        .modal-body p,
+        .modal-body li {
+            font-size: var(--small-size);
+            line-height: var(--small-line);
+            color: var(--text-secondary);
+        }
+
         .modal-body p {
             margin-bottom: var(--space-2);
-            color: var(--text-secondary);
+        }
+
+        .modal-body p strong {
+            color: var(--text-primary);
+            font-weight: 600;
         }
 
         .modal-body ul {
@@ -1060,8 +1071,6 @@
 
         .modal-body li {
             margin-bottom: var(--space-1);
-            color: var(--text-secondary);
-            font-size: var(--small-size);
         }
 
         .modal-footer {
