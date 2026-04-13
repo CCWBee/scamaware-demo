@@ -1554,7 +1554,7 @@
 
     <script>
         // Configuration - API URL hardcoded, no user-visible settings
-        const API_URL = 'https://overlate-controllingly-jenise.ngrok-free.dev';
+        const API_URL = 'https://scamaware-api.charlesbee2002.workers.dev';
         let conversationHistory = [];
         let isLoading = false;
         let chatOpen = false;
@@ -1598,8 +1598,7 @@
             const r = await fetch(READY_URL, {
               method: 'GET',
               cache: 'no-store',
-              mode: 'cors',
-              headers: { 'ngrok-skip-browser-warning': 'true' }
+              mode: 'cors'
             });
 
             readyOk = r.ok;
@@ -1738,8 +1737,7 @@
                 const r = await fetch(`${API_URL}/api/chat`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'ngrok-skip-browser-warning': 'true'
+                        'Content-Type': 'application/json'
                     },
                     mode: 'cors',
                     body: JSON.stringify({ message: msg, history: conversationHistory })
