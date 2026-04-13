@@ -796,7 +796,8 @@
             padding: var(--space-2) var(--space-3);
             border-top: 1px solid var(--hairline);
             display: flex;
-            gap: var(--space-2);
+            align-items: center;
+            gap: var(--space-1);
         }
 
         .chat-input {
@@ -832,47 +833,165 @@
         }
 
         .chat-status {
-          display: flex;
-          justify-content: space-between;
-          align-items: baseline;
-          padding: var(--space-2) var(--space-3);
-          border-bottom: 1px solid var(--hairline);
-          background: var(--white);
+          display: none;
         }
 
-        .chat-status-label {
+        .chat-status-indicator {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          margin-left: var(--space-1);
+          vertical-align: middle;
+        }
+
+        .chat-status-mark {
+          width: 6px;
+          height: 6px;
+          display: inline-block;
+          flex-shrink: 0;
+          background: var(--hairline);
+          transition: background var(--transition-medium);
+        }
+
+        .chat-status-label-inline {
           font-size: var(--label-size);
-          font-weight: 500;
-          letter-spacing: 0.02em;
+          font-weight: var(--label-weight);
+          letter-spacing: var(--label-tracking);
           text-transform: uppercase;
           color: var(--text-secondary);
+          white-space: nowrap;
+          overflow: hidden;
+          max-width: 0;
+          opacity: 0;
+          transition: max-width 0.3s ease, opacity 0.3s ease;
         }
 
-        .chat-status-value {
-          font-size: var(--label-size);
-          font-weight: 500;
-          letter-spacing: 0.02em;
-          text-transform: uppercase;
-          color: var(--text-secondary);
+        /* Show label on hover */
+        .chat-status-indicator:hover .chat-status-label-inline,
+        .chat-status-indicator.reveal .chat-status-label-inline {
+          max-width: 80px;
+          opacity: 1;
         }
 
-        .chat-status[data-state="online"] .chat-status-value {
-          color: var(--text-secondary);
+        /* Offline always shows label */
+        .chat-status-indicator[data-state="offline"] .chat-status-label-inline {
+          max-width: 80px;
+          opacity: 1;
         }
 
-        .chat-status[data-state="connecting"] .chat-status-value {
-          color: var(--text-secondary);
-          opacity: 0.85;
+        .chat-status-indicator[data-state="online"] .chat-status-mark {
+          background: var(--text-secondary);
         }
 
-        .chat-status[data-state="offline"] .chat-status-value {
+        .chat-status-indicator[data-state="connecting"] .chat-status-mark {
+          background: var(--hairline);
+          animation: statusPulse 1.5s ease-in-out infinite;
+        }
+
+        .chat-status-indicator[data-state="offline"] .chat-status-mark {
+          background: var(--caution);
+        }
+
+        .chat-status-indicator[data-state="offline"] .chat-status-label-inline {
           color: var(--caution);
+        }
+
+        @keyframes statusPulse {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 1; }
         }
 
         .typing {
             font-size: var(--small-size);
             color: var(--text-secondary);
             padding: var(--space-1) 0;
+        }
+
+        /* ============================================
+           IMAGE UPLOAD
+           ============================================ */
+        .chat-image-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            flex-shrink: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .chat-image-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--text-secondary);
+            fill: none;
+            stroke-width: 1.5;
+            transition: stroke var(--transition-fast);
+        }
+
+        .chat-image-btn:hover svg {
+            stroke: var(--action);
+        }
+
+        .image-preview-area {
+            display: none;
+            padding: var(--space-1) var(--space-3);
+            border-top: 1px solid var(--hairline);
+            background: var(--bg);
+        }
+
+        .image-preview-area.active {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .image-preview-thumb {
+            width: 64px;
+            height: 64px;
+            object-fit: cover;
+            border: 1px solid var(--hairline);
+        }
+
+        .image-preview-info {
+            flex: 1;
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+        }
+
+        .image-preview-remove {
+            background: none;
+            border: none;
+            font-size: var(--body-size);
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: var(--space-1);
+        }
+
+        .image-preview-remove:hover {
+            color: var(--critical);
+        }
+
+        .image-error {
+            display: none;
+            padding: var(--space-1) var(--space-3);
+            font-size: var(--small-size);
+            color: var(--critical);
+            background: var(--bg);
+        }
+
+        .image-error.active {
+            display: block;
+        }
+
+        .message-image {
+            max-width: 200px;
+            max-height: 150px;
+            margin-top: var(--space-1);
+            border: 1px solid var(--hairline);
         }
 
         /* ============================================
@@ -998,6 +1117,13 @@
             /* Hide floating chat toggle on desktop - CTA button opens chat */
             .chat-toggle {
                 display: none;
+            }
+
+            /* Chat panel needs fixed positioning on desktop since toggle is hidden */
+            .chat-panel {
+                position: fixed;
+                bottom: var(--space-3);
+                right: var(--space-3);
             }
         }
 
@@ -1195,10 +1321,6 @@
                 flex: 0 0 auto;
             }
 
-            .chat-status {
-                flex: 0 0 auto;
-            }
-
             .chat-messages {
                 flex: 1 1 auto;
                 overflow-y: auto;
@@ -1307,7 +1429,7 @@
                 <div class="hero-cta">
                     <div class="cta-block">
                         <p class="cta-block-title">Check It Now</p>
-                        <p class="cta-block-text">Describe what you received. Get an instant assessment.</p>
+                        <p class="cta-block-text">Describe or upload a screenshot of what you received. Get an instant AI assessment.</p>
                         <button class="cta-primary" onclick="openChat()">Start Check</button>
                     </div>
                 </div>
@@ -1503,22 +1625,28 @@
         <button class="chat-toggle" id="chatToggle" onclick="toggleChat()">Check a message</button>
         <div class="chat-panel" id="chatPanel">
             <div class="chat-header">
-                <span class="chat-header-title">Verify a Message</span>
+                <span class="chat-header-title">Verify a Message <span class="chat-status-indicator" id="chatStatusIndicator" data-state="connecting"><span class="chat-status-mark"></span><span class="chat-status-label-inline" id="chatStatusText">Connecting</span></span></span>
                 <button class="chat-close" onclick="closeChat()">x</button>
-            </div>
-            <div class="chat-status" id="chatStatus" role="status" aria-live="polite">
-              <span class="chat-status-label">Status</span>
-              <span class="chat-status-value" id="chatStatusValue">Connecting…</span>
             </div>
             <div class="chat-messages" id="chatMessages">
                 <div class="message assistant">
                     <div class="message-label">Assistant</div>
                     <div class="message-content">
-                        Describe the message, call, or email you received. I will help you assess whether it is suspicious and what to do next.
+                        Describe the message, call, or email you received, or upload a screenshot. I will help you assess whether it is suspicious and what to do next.
                     </div>
                 </div>
             </div>
+            <div class="image-preview-area" id="imagePreview">
+                <img class="image-preview-thumb" id="imageThumb" src="" alt="Preview">
+                <span class="image-preview-info" id="imageInfo"></span>
+                <button class="image-preview-remove" onclick="clearPendingImage()" title="Remove image">&#x2715;</button>
+            </div>
+            <div class="image-error" id="imageError"></div>
             <div class="chat-input-area">
+                <input type="file" id="imageInput" accept="image/png,image/jpeg,image/gif,image/webp" style="display:none" onchange="handleImageSelect(event)">
+                <button class="chat-image-btn" onclick="document.getElementById('imageInput').click()" title="Upload screenshot">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8" cy="9" r="1.5" fill="currentColor" stroke="none"/><path d="M21 16l-4-4-9 9"/></svg>
+                </button>
                 <input type="text" class="chat-input" id="chatInput" placeholder="Describe what you received" autocomplete="off">
                 <button class="chat-send" id="sendBtn" onclick="sendMessage()">Send</button>
             </div>
@@ -1531,8 +1659,9 @@
             <div class="footer-content">
                 <span class="footer-identity">Jersey Fraud Prevention Forum</span>
                 <div class="footer-links">
+                    <a href="#" onclick="openModal('termsModal'); return false;">Terms &amp; Conditions</a>
+                    <a href="#" onclick="openModal('complianceModal'); return false;">Privacy &amp; Compliance</a>
                     <a href="#" onclick="openDisclaimerModal(); return false;">AI Disclaimer</a>
-                    <a href="#">Privacy</a>
                     <a href="#">Accessibility</a>
                 </div>
             </div>
@@ -1555,15 +1684,119 @@
                     <li>ScamAware Jersey accepts no liability for actions taken based on AI content.</li>
                     <li>In emergency situations, call 999 immediately.</li>
                 </ul>
-                <p>By proceeding, you acknowledge these limitations.</p>
+                <p><strong>Image Analysis:</strong> You may upload screenshots of suspicious messages for AI analysis. Images are processed by Anthropic (our AI provider) in real time and are not stored by ScamAware Jersey. Under Anthropic's API terms, inputs may be retained for up to 7 days for safety screening, after which they are deleted. Do not upload images containing bank account numbers, passwords, or identity documents.</p>
+                <p><strong>Data Processing:</strong> By using this service, you consent to your messages and any uploaded images being processed by Anthropic, PBC (San Francisco, USA) as a data sub-processor. International data transfers are covered by Standard Contractual Clauses (SCCs) in accordance with UK GDPR. See our Terms &amp; Conditions and Privacy &amp; Compliance pages for full details.</p>
             </div>
             <div class="modal-footer">
                 <button class="modal-btn secondary" onclick="declineDisclaimer()">Decline</button>
-                <button class="modal-btn primary" onclick="acceptDisclaimer()">I Understand</button>
+                <button class="modal-btn primary" onclick="acceptDisclaimer()">I Understand &amp; Consent</button>
             </div>
         </div>
     </div>
 
+
+    <!-- Terms & Conditions Modal -->
+    <div class="modal-overlay" id="termsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <p class="modal-header-label">LEGAL</p>
+                <h2>Terms &amp; Conditions</h2>
+            </div>
+            <div class="modal-body">
+                <p><strong>1. Service Description</strong></p>
+                <p>ScamAware Jersey provides an AI-powered tool to help Jersey residents assess whether communications they have received may be fraudulent. You may submit text descriptions or upload screenshots of suspicious messages for analysis. This service is for informational guidance only and does not constitute professional, legal, or financial advice.</p>
+
+                <p><strong>2. AI Limitations</strong></p>
+                <p>Assessments are generated by an AI model (Anthropic Claude) and may be incorrect, incomplete, or misleading. You must not rely solely on this tool when making decisions. Always verify through official channels such as States of Jersey Police (01534 612612) or the Jersey Financial Services Commission.</p>
+
+                <p><strong>3. Image Upload Terms</strong></p>
+                <ul>
+                    <li>Uploaded images are transmitted to Anthropic's API for real-time analysis and are not stored on our servers.</li>
+                    <li>Anthropic may retain API inputs for up to 7 days for trust and safety screening, after which they are permanently deleted.</li>
+                    <li>Do not upload images containing: full bank account numbers, passwords, PINs, identity documents, or images of minors.</li>
+                    <li>You warrant that you have the right to share any personal data visible in uploaded images, or that such sharing is necessary for the legitimate purpose of fraud detection.</li>
+                </ul>
+
+                <p><strong>4. Data Controller</strong></p>
+                <p>ScamAware Jersey operates as a community fraud prevention initiative. For data protection enquiries, contact: privacy@scamaware.je</p>
+
+                <p><strong>5. Data Processing</strong></p>
+                <ul>
+                    <li><strong>Sub-processor:</strong> Anthropic, PBC (San Francisco, USA) processes your messages and images under their Data Processing Addendum (DPA), which incorporates Standard Contractual Clauses for international data transfers.</li>
+                    <li><strong>Hosting:</strong> Cloudflare, Inc. provides edge computing and hosting infrastructure.</li>
+                </ul>
+
+                <p><strong>6. Legal Basis for Processing</strong></p>
+                <ul>
+                    <li><strong>Legitimate Interest</strong> (UK GDPR Article 6(1)(f)): Fraud prevention and public safety, a recognised legitimate interest under GDPR Recital 47.</li>
+                    <li><strong>Explicit Consent</strong> (UK GDPR Article 6(1)(a)): Obtained via the AI Disclaimer acceptance before first use.</li>
+                </ul>
+
+                <p><strong>7. Data Retention</strong></p>
+                <ul>
+                    <li>Text conversations exist only in your browser session and are not stored server-side.</li>
+                    <li>Uploaded images are processed in real time and not retained by ScamAware Jersey.</li>
+                    <li>Anthropic retains API inputs for up to 7 days for safety purposes, then deletes them.</li>
+                    <li>No user accounts, profiles, or persistent records are created.</li>
+                </ul>
+
+                <p><strong>8. Your Rights</strong></p>
+                <p>Under UK GDPR (Articles 15-22), you have the right to: access your personal data, rectification, erasure, restriction of processing, data portability, and to object to processing. As we do not store your data beyond the browser session, most of these rights are satisfied by design. For enquiries, contact: privacy@scamaware.je</p>
+
+                <p><strong>9. Automated Decision-Making</strong></p>
+                <p>This service uses AI to generate guidance. It does not make automated decisions with legal or similarly significant effect. You make all final decisions about how to act.</p>
+
+                <p><strong>10. Limitation of Liability</strong></p>
+                <p>ScamAware Jersey is provided as-is with no warranty. We accept no liability for the accuracy of AI analysis, or for any loss arising from actions taken or not taken based on the tool's output.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn primary" onclick="closeModal('termsModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy & Compliance Modal -->
+    <div class="modal-overlay" id="complianceModal">
+        <div class="modal">
+            <div class="modal-header">
+                <p class="modal-header-label">COMPLIANCE</p>
+                <h2>Privacy &amp; Regulatory Compliance</h2>
+            </div>
+            <div class="modal-body">
+                <p><strong>GDPR &amp; Data Protection Compliance</strong></p>
+                <p>ScamAware Jersey is designed to comply with the UK General Data Protection Regulation (UK GDPR), the Data Protection Act 2018, and the Data Protection (Jersey) Law 2018 administered by the Jersey Office of the Information Commissioner (JOIC).</p>
+
+                <p><strong>Privacy by Design</strong></p>
+                <ul>
+                    <li><strong>Zero server-side storage:</strong> We do not store your messages, images, or conversation history on any server. All chat data exists only in your browser session and is cleared when you close the tab.</li>
+                    <li><strong>Pass-through processing:</strong> Uploaded images are transmitted directly to Anthropic's API for analysis and are never written to disk, logged, or cached by our infrastructure.</li>
+                    <li><strong>No user accounts:</strong> We do not collect names, email addresses, or any registration data.</li>
+                    <li><strong>No cookies:</strong> We use only browser sessionStorage (not cookies) to remember your disclaimer acceptance for the current session.</li>
+                </ul>
+
+                <p><strong>Sub-Processors</strong></p>
+                <ul>
+                    <li><strong>Anthropic, PBC</strong> (San Francisco, USA) — AI model provider. Processes text and image inputs via their Messages API. Anthropic holds SOC 2 Type II, ISO 27001:2022, and ISO/IEC 42001:2023 certifications. Their Data Processing Addendum incorporates EU/UK Standard Contractual Clauses (Modules 2 and 3) for lawful international data transfers. API inputs are retained for up to 7 days for safety screening, then permanently deleted.</li>
+                    <li><strong>Cloudflare, Inc.</strong> (San Francisco, USA) — Edge computing, CDN, and DNS. Provides the Workers serverless runtime and Pages static hosting. Cloudflare's DPA also incorporates Standard Contractual Clauses.</li>
+                </ul>
+
+                <p><strong>International Data Transfers</strong></p>
+                <p>Your data is processed by services based in the United States. These transfers are lawful under UK GDPR Chapter V, relying on Standard Contractual Clauses (SCCs) incorporated into our agreements with both Anthropic and Cloudflare.</p>
+
+                <p><strong>Data Subject Rights</strong></p>
+                <p>You have the right to access, rectify, erase, restrict, port, and object to the processing of your personal data under UK GDPR Articles 15-22. Because we do not store personal data beyond your browser session, these rights are largely satisfied by the architecture itself. If you have concerns, contact: privacy@scamaware.je</p>
+
+                <p><strong>Complaints</strong></p>
+                <p>If you believe your data protection rights have been infringed, you may lodge a complaint with the Jersey Office of the Information Commissioner (JOIC) at oicjersey.org, or the UK Information Commissioner's Office (ICO) at ico.org.uk.</p>
+
+                <p><strong>Legitimate Interest Assessment</strong></p>
+                <p>We have conducted a Legitimate Interest Assessment concluding that the fraud prevention purpose of this tool, combined with our zero-retention architecture and explicit user consent, appropriately balances our legitimate interest against users' privacy rights. A copy of this assessment is available on request.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn primary" onclick="closeModal('complianceModal')">Close</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Configuration - API URL hardcoded, no user-visible settings
@@ -1573,6 +1806,7 @@
         let chatOpen = false;
         let disclaimerAccepted = sessionStorage.getItem('scamaware_disclaimer_accepted') === 'true';
         let pendingChatAction = null;
+        let pendingImage = null; // { data: base64, mediaType: string, dataUrl: string }
 
         // DOM Elements
         const chatPanel = document.getElementById('chatPanel');
@@ -1586,26 +1820,32 @@
         const READY_URL = `${API_URL}/readyz`;
         let readyOk = false;
 
-        const chatStatusEl = document.getElementById('chatStatus');
-        const chatStatusValue = document.getElementById('chatStatusValue');
+        const chatStatusIndicator = document.getElementById('chatStatusIndicator');
+        const chatStatusText = document.getElementById('chatStatusText');
 
-        function setStatus(state, text) {
-          if (!chatStatusEl) return;
-          chatStatusEl.dataset.state = state;
-          chatStatusValue.textContent = text;
+        function setStatus(state) {
+          if (!chatStatusIndicator) return;
+          chatStatusIndicator.dataset.state = state;
+          chatStatusText.textContent = state === 'online' ? 'Online' : state === 'connecting' ? 'Connecting' : 'Offline';
 
           const canSend = (state === 'online');
           sendBtn.disabled = !canSend || isLoading;
+
+          // Brief reveal on state change then fade
+          if (state === 'online') {
+            chatStatusIndicator.classList.add('reveal');
+            setTimeout(() => chatStatusIndicator.classList.remove('reveal'), 2000);
+          }
         }
 
         async function checkBackendReady() {
           if (navigator.onLine === false) {
             readyOk = false;
-            setStatus('offline', 'Offline');
+            setStatus('offline');
             return false;
           }
 
-          setStatus('connecting', 'Connecting…');
+          setStatus('connecting');
 
           try {
             const r = await fetch(READY_URL, {
@@ -1615,11 +1855,11 @@
             });
 
             readyOk = r.ok;
-            setStatus(readyOk ? 'online' : 'offline', readyOk ? 'Online' : 'Offline');
+            setStatus(readyOk ? 'online' : 'offline');
             return readyOk;
           } catch {
             readyOk = false;
-            setStatus('offline', 'Offline');
+            setStatus('offline');
             return false;
           }
         }
@@ -1646,6 +1886,59 @@
         function declineDisclaimer() {
             disclaimerModal.classList.remove('open');
             pendingChatAction = null;
+        }
+
+        // Generic modal open/close
+        function openModal(id) {
+            document.getElementById(id)?.classList.add('open');
+        }
+        function closeModal(id) {
+            document.getElementById(id)?.classList.remove('open');
+        }
+
+        // Image handling
+        const MAX_IMAGE_SIZE = 4 * 1024 * 1024; // 4 MB
+        const ALLOWED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/gif', 'image/webp'];
+
+        function handleImageSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const errorEl = document.getElementById('imageError');
+            errorEl.classList.remove('active');
+            errorEl.textContent = '';
+
+            if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+                errorEl.textContent = 'Please use PNG, JPEG, GIF, or WebP images.';
+                errorEl.classList.add('active');
+                e.target.value = '';
+                return;
+            }
+            if (file.size > MAX_IMAGE_SIZE) {
+                errorEl.textContent = 'Image must be under 4 MB.';
+                errorEl.classList.add('active');
+                e.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                const dataUrl = ev.target.result;
+                const base64 = dataUrl.split(',')[1];
+                pendingImage = { data: base64, mediaType: file.type, dataUrl };
+
+                document.getElementById('imageThumb').src = dataUrl;
+                document.getElementById('imageInfo').textContent = file.name + ' (' + (file.size / 1024).toFixed(0) + ' KB)';
+                document.getElementById('imagePreview').classList.add('active');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearPendingImage() {
+            pendingImage = null;
+            document.getElementById('imageInput').value = '';
+            document.getElementById('imagePreview').classList.remove('active');
+            document.getElementById('imageError').classList.remove('active');
         }
 
         function scrollChatToBottom() {
@@ -1734,11 +2027,15 @@
             return html;
         }
 
-        function addMessage(content, isUser = false) {
+        function addMessage(content, isUser = false, imageDataUrl = null) {
             const div = document.createElement('div');
             div.className = `message ${isUser ? 'user' : 'assistant'}`;
             const rendered = isUser ? content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>') : renderMarkdown(content);
-            div.innerHTML = `<div class="message-label">${isUser ? 'You' : 'Assistant'}</div><div class="message-content">${rendered}</div>`;
+            let imageHtml = '';
+            if (imageDataUrl) {
+                imageHtml = `<img class="message-image" src="${imageDataUrl}" alt="Uploaded screenshot">`;
+            }
+            div.innerHTML = `<div class="message-label">${isUser ? 'You' : 'Assistant'}</div><div class="message-content">${rendered || (imageDataUrl ? 'Screenshot uploaded' : '')}${imageHtml}</div>`;
             chatMessages.appendChild(div);
             scrollChatToBottom();
         }
@@ -1765,11 +2062,23 @@
               }
             }
             const msg = chatInput.value.trim();
-            if (!msg || isLoading) return;
+            const hasImage = !!pendingImage;
+            if ((!msg && !hasImage) || isLoading) return;
             isLoading = true;
             sendBtn.disabled = true;
             chatInput.value = '';
-            addMessage(msg, true);
+
+            // Show user message with optional image thumbnail
+            const imageDataUrl = hasImage ? pendingImage.dataUrl : null;
+            addMessage(msg, true, imageDataUrl);
+
+            // Build request body
+            const requestBody = { message: msg, history: conversationHistory };
+            if (hasImage) {
+                requestBody.image = { data: pendingImage.data, media_type: pendingImage.mediaType };
+            }
+            clearPendingImage();
+
             addTyping();
             try {
                 const r = await fetch(`${API_URL}/api/chat`, {
@@ -1778,16 +2087,18 @@
                         'Content-Type': 'application/json'
                     },
                     mode: 'cors',
-                    body: JSON.stringify({ message: msg, history: conversationHistory })
+                    body: JSON.stringify(requestBody)
                 });
                 removeTyping();
                 if (!r.ok) throw new Error();
                 const d = await r.json();
-                conversationHistory.push({ role: 'user', content: msg }, { role: 'assistant', content: d.response });
+                // Store text-only history (no base64 images)
+                const historyText = hasImage ? '[Screenshot attached] ' + msg : msg;
+                conversationHistory.push({ role: 'user', content: historyText }, { role: 'assistant', content: d.response });
                 if (conversationHistory.length > 20) conversationHistory = conversationHistory.slice(-20);
                 addMessage(d.response);
                 readyOk = true;
-                setStatus('online', 'Online');
+                setStatus('online');
             } catch {
                 removeTyping();
                 addMessage("Unable to connect to the server. Please try again later.");
@@ -1824,13 +2135,21 @@
             if (e.target === disclaimerModal) declineDisclaimer();
         });
 
+        // Close legal modals on overlay click
+        document.getElementById('termsModal').addEventListener('click', e => {
+            if (e.target.id === 'termsModal') closeModal('termsModal');
+        });
+        document.getElementById('complianceModal').addEventListener('click', e => {
+            if (e.target.id === 'complianceModal') closeModal('complianceModal');
+        });
+
         window.addEventListener('online', () => {
           if (chatOpen) checkBackendReady();
         });
 
         window.addEventListener('offline', () => {
           readyOk = false;
-          setStatus('offline', 'Offline');
+          setStatus('offline');
         });
 
         // Force initial closed state on load

@@ -1,0 +1,7 @@
+name = "scamaware-api"
+main = "worker.js"
+compatibility_date = "2024-09-23"
+
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "8cd1ecbc2c1b49c899700cdb550a04c7"
