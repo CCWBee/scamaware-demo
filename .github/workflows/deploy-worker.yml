@@ -2,9 +2,7 @@ name: Deploy Worker
 
 on:
   push:
-    branches: [main]
-    paths:
-      - 'worker/**'
+    branches: [master]
 
 jobs:
   deploy:

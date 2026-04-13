@@ -1,6 +1,7 @@
 name = "scamaware-api"
 main = "worker.js"
 compatibility_date = "2024-09-23"
+assets = { directory = "public" }
 
 [[kv_namespaces]]
 binding = "RATE_LIMIT"

@@ -1,5 +1,5 @@
-// ScamAware Jersey — Cloudflare Worker API
-// Proxies chat requests (text + image) to Anthropic Messages API
+// ScamAware Jersey — Cloudflare Worker
+// Serves static frontend + proxies chat requests (text + image) to Anthropic
 
 const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/gif', 'image/webp'];
 const MAX_IMAGE_BYTES = 4 * 1024 * 1024; // 4 MB decoded
@@ -52,17 +52,10 @@ Warm but professional. Clear, no jargon. Brief but helpful. You are a public ser
 
 // ── Helpers ──────────────────────────────────────────────────────────────
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Max-Age': '86400',
-};
-
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { 'Content-Type': 'application/json', ...corsHeaders },
+    headers: { 'Content-Type': 'application/json' },
   });
 }
 
@@ -75,14 +68,12 @@ async function checkRateLimit(env, ip) {
 }
 
 // ── Main handler ─────────────────────────────────────────────────────────
+// Static assets (index.html, favicon, images) are served automatically
+// by the Cloudflare Workers assets binding. This handler only runs for
+// routes that don't match a static file.
 
 export default {
   async fetch(request, env) {
-    // CORS preflight
-    if (request.method === 'OPTIONS') {
-      return new Response(null, { status: 204, headers: corsHeaders });
-    }
-
     const url = new URL(request.url);
 
     // Health check
@@ -194,7 +185,7 @@ export default {
       return json({ response });
     }
 
-    // 404 for everything else
-    return json({ error: 'Not found.' }, 404);
+    // Everything else falls through to static assets
+    return new Response('Not found', { status: 404 });
   },
 };
