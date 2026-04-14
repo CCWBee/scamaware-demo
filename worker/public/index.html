@@ -2117,8 +2117,18 @@
                     body: JSON.stringify(requestBody)
                 });
                 removeTyping();
-                if (!r.ok) throw new Error();
-                const d = await r.json();
+                const d = await r.json().catch(() => ({ error: 'Server returned an invalid response.' }));
+                if (!r.ok) {
+                    addMessage(d.error || `Server error (${r.status}). Please try again.`);
+                    if (r.status >= 500) {
+                        readyOk = false;
+                        setStatus('offline');
+                    }
+                    isLoading = false;
+                    sendBtn.disabled = false;
+                    chatInput.focus();
+                    return;
+                }
                 // Store text-only history (no base64 images)
                 const historyText = hasImage ? '[Screenshot attached] ' + msg : msg;
                 conversationHistory.push({ role: 'user', content: historyText }, { role: 'assistant', content: d.response });
@@ -2126,11 +2136,12 @@
                 addMessage(d.response);
                 readyOk = true;
                 setStatus('online');
-            } catch {
+            } catch (e) {
                 removeTyping();
                 addMessage("Unable to connect to the server. Please try again later.");
+                console.error('Chat request failed:', e);
                 readyOk = false;
-                setStatus(navigator.onLine === false ? 'offline' : 'offline', 'Offline');
+                setStatus('offline');
             }
             isLoading = false;
             sendBtn.disabled = false;
